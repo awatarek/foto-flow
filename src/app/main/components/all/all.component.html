@@ -1,0 +1,9 @@
+<div class="content">
+    <div class="gallery">
+        <div class="gallery-item" *ngFor="let catalog of cat" [routerLink]="[ '/catalog', catalog.id ]">
+            {{catalog.name}} <br>
+            <img id="{{ 'image-' + catalog.id }}" alt="">
+            <div class="details"></div>
+        </div>
+    </div>
+</div>

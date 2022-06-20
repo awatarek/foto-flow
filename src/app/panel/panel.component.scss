@@ -1,0 +1,16 @@
+.content{
+    display: grid;
+    min-height: 100vh;
+}
+
+@media screen and (max-width: 900px) {
+    .content {
+       grid-template-rows: 70px calc(100vw - 50px);
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .content {
+        grid-template-columns: 200px calc(100vw - 200px);
+    }
+}

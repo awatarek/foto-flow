@@ -1,0 +1,12 @@
+<div class="block-info">
+    Zdjęcia po dodaniu nie będą widoczne dopóki nie zostaną zaakceptowane
+</div>
+
+<div>
+    <form [formGroup]="form">
+        <input type="text" formControlName="location" placeholder="lokalizacja">
+        <input type="text" formControlName="author" placeholder="autor zdjęć">        
+        <input type="file" name="" id="" multiple (change)="fileChange($event)" name="image" enctype="multipart/form-data">
+        <button class="submit" (click)="sendFiles()"> Prześlij</button>
+    </form>
+</div>

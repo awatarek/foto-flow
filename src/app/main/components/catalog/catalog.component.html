@@ -1,0 +1,20 @@
+<p class="header" *ngIf="catalogInfo">{{catalogInfo[0].name}}</p>
+
+<div class="buttons">
+    <button (click)="downloadAll()">Pobierz wszystkie</button>
+    <button (click)="chooseMultipleFile()">Pobierz Wybrane</button>
+    <button (click)="downloadMultipleFile()" *ngIf="downloadMultiple">Pobierz wybrane ({{fileToDownload.length}})</button>
+</div>
+
+
+<div class="gallery">
+    <div *ngFor="let item of photos" class="gallery-item" (click)="openDialog(item.id); addToMany(item.id)" [ngClass]="classIsActive(item.id)">
+        <img id="{{ 'image-' + item.id }}" alt="">
+        <div class="details">
+            Name: {{item.name}}<br>
+            Author: {{item.author}}<br>
+            Location: {{item.location}}<br>
+            Upload: {{item.upload_day | date}}<br>
+        </div>
+    </div>
+</div>

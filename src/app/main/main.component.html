@@ -1,0 +1,13 @@
+<div class="header">
+    <img src="assets\Krzyz_FSE.png" alt="" [routerLink]="['/']">
+    <div class="menu">
+        <div [routerLink]="['/add-catalog']" *ngIf="!isCatalog && !isAdd">Dodaj galerie</div>
+        <div [routerLink]="['/add-photos', catalogId]" *ngIf="isCatalog && !isAdd">Dodaj zdjęcia</div>
+        <span *ngIf="isAdd"></span>
+        <div [routerLink]="['/']">Strona główna</div>
+    </div>
+</div>
+
+<div class="content">
+    <router-outlet></router-outlet>
+</div>
