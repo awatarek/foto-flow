@@ -22,14 +22,14 @@ export class CatalogsService {
     }
 
     public async createCatalog(formData: FormData){
-        await this.http.post("http://localhost:4001/api/v1/catalog/create", formData, {
+        await this.http.post(this.url+"catalog/create", formData, {
             reportProgress: true,
             responseType: 'json',
         }).toPromise();
     }
 
     public async addPhotoToCatalog(formData: FormData){
-        await this.http.post("http://localhost:4001/api/v1/catalog/add", formData, {
+        await this.http.post(this.url+"catalog/add", formData, {
             reportProgress: true,
             responseType: 'json',
         }).toPromise();

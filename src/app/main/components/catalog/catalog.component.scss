@@ -34,6 +34,7 @@
     width: calc(100% - 40px);
     margin: auto;
     grid-gap: 10px;
+    padding-bottom: 20px;
 
     .download-checkbox{
         position: absolute;
@@ -81,6 +82,32 @@
             cursor: pointer;
             background-color: rgba(0, 0, 0, 0.705);
         }
+    }
+}
+
+.pages{
+    min-height: 40px;
+    width: 100%;
+
+    .page-list{
+        display: inline-block;
+        margin: auto;
+        text-align: center;
+    }
+
+    .page{
+        cursor: pointer;
+        display: block;
+        float: left;
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+    .active{
+        background-color: green;
+        color: white;
     }
 }
 

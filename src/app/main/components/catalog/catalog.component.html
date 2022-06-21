@@ -3,12 +3,19 @@
 <div class="buttons">
     <button (click)="downloadAll()">Pobierz wszystkie</button>
     <button (click)="chooseMultipleFile()">Pobierz Wybrane</button>
-    <button (click)="downloadMultipleFile()" *ngIf="downloadMultiple">Pobierz wybrane ({{fileToDownload.length}})</button>
+    <button (click)="downloadMultipleFile()" *ngIf="downloadMultiple">Pobierz ({{fileToDownload.length}})</button>
 </div>
 
+<div class="pages" *ngIf="numberOfPages != 1">
+    <div class="page-list">
+        <div class="page" *ngFor="let item of pageArray" [ngClass]="isActive(item)" (click)="setPage(item)">
+            <div>{{item}}</div>
+        </div>
+    </div>
+</div>
 
 <div class="gallery">
-    <div *ngFor="let item of photos" class="gallery-item" (click)="openDialog(item.id); addToMany(item.id)" [ngClass]="classIsActive(item.id)">
+    <div *ngFor="let item of visiblePhoto" class="gallery-item" (click)="openDialog(item.id); addToMany(item.id)" [ngClass]="classIsActive(item.id)">
         <img id="{{ 'image-' + item.id }}" alt="">
         <div class="details">
             Name: {{item.name}}<br>

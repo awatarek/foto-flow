@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Catalog } from 'src/app/shared/model/catalog.model';
@@ -19,22 +19,35 @@ export class CatalogComponent implements OnInit {
   public downloadMultiple: boolean = false;
   public fileToDownload: Photo[] = [];
 
+  private numberOfPhotos = 50;
+  public visiblePhoto: Photo[] = [];
+  public page: number = 0;
+  public pageArray: number[] = [];
+  public numberOfPages: number = 1;
+
   constructor(private router: ActivatedRoute, private http: HttpClient, public dialog: MatDialog, private catalogsService: CatalogsService) { }
 
   async ngOnInit(): Promise<void> {
     this.catalogId = parseInt(this.router.snapshot.paramMap.get("id"));
     this.catalogInfo = await this.catalogsService.getCatalogDetails(this.catalogId);
     this.photos = await this.catalogsService.getPhotosFromCatalog(this.catalogId);
-    for(let item of this.photos){
-      let data = await this.catalogsService.getMiniPhoto(item.id);
-      this.image.push({id: item.id, blob: data});
-    }
-
     
 
-    for(let item of this.image){
-      let url = URL.createObjectURL(item.blob);
-      let image = document.querySelector("img#image-"+item.id);
+    this.numberOfPages = Math.ceil(this.photos.length / this.numberOfPhotos);
+    for(let i = 0; i< this.numberOfPages; i++){
+      this.pageArray.push((i+1));
+    }
+
+    let maxPhoto = this.page*this.numberOfPhotos+this.numberOfPhotos;
+    if(maxPhoto > this.photos.length) maxPhoto = this.photos.length;
+
+    for(let i = (this.page*this.numberOfPhotos); i < maxPhoto; i++){
+      this.visiblePhoto.push(this.photos[i]);
+      let data = await this.catalogsService.getMiniPhoto(this.photos[i].id);
+      this.image.push({id: this.photos[i].id, blob: data});
+
+      let url = URL.createObjectURL(data);
+      let image = document.querySelector("img#image-"+this.photos[i].id);
       image.setAttribute("src", url)
     }
   }
@@ -43,7 +56,7 @@ export class CatalogComponent implements OnInit {
     if(this.downloadMultiple) return;
       const dialogRef = this.dialog.open(ImageDialog, {
         width: '720px',
-        data: {id: id, photos: this.photos},
+        data: {id: id, photos: this.photos, images: this.image},
       });
   
       dialogRef.afterClosed().subscribe(result => {
@@ -121,6 +134,31 @@ export class CatalogComponent implements OnInit {
     }
     return "";
   }
+
+
+  public async setPage(page: number){
+    this.visiblePhoto = [];
+    this.page = page - 1;
+
+
+    let maxPhoto = this.page*this.numberOfPhotos+this.numberOfPhotos;
+    if(maxPhoto > this.photos.length) maxPhoto = this.photos.length;
+
+    for(let i = (this.page*this.numberOfPhotos); i < maxPhoto; i++){
+      this.visiblePhoto.push(this.photos[i]);
+      let data = await this.catalogsService.getMiniPhoto(this.photos[i].id);
+      this.image.push({id: this.photos[i].id, blob: data});
+
+      let url = URL.createObjectURL(data);
+      let image = document.querySelector("img#image-"+this.photos[i].id);
+      image.setAttribute("src", url)
+    }
+  }
+
+  public isActive(item: number){
+    if((item-1) == this.page) return "active";
+    return "";
+  }
   
 
 }
@@ -147,6 +185,8 @@ export class ImageDialog implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    console.log(this.data.images)
+
     this.isLoading = true;
     let item = await this.catalogsService.getMiniPhoto(this.data.id);
     let url = URL.createObjectURL(item);

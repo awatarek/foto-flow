@@ -13,6 +13,7 @@ month.txt
 # Include when developing application packages.
 pubspec.lock
 .c9
+.angular/
 .idea/
 .devcontainer/*
 !.devcontainer/README.md

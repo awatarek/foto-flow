@@ -35,6 +35,18 @@
 .content{
     width: calc(100vw - 20px);
     padding: 10px;
-    height: calc(100vh - 90px);
+    min-height: calc(100vh - 90px);
     background-color: #DAD7CD;
+}
+
+.footer{
+    position: fixed;
+    font-size: 12px;
+    bottom: 10px;
+    height: 30px;
+    width: 100%;
+
+    p{
+        text-align: center;
+    }
 }

@@ -1,6 +1,14 @@
 <div class="content">
+    <div class="pages" *ngIf="numberOfPages != 1">
+        <div class="page-list">
+            <div class="page" *ngFor="let item of pageArray" [ngClass]="isActive(item)" (click)="getPhotos(item)">
+                <div>{{item}}</div>
+            </div>
+        </div>
+    </div>
+
     <div class="gallery">
-        <div class="gallery-item" *ngFor="let catalog of cat" [routerLink]="[ '/catalog', catalog.id ]">
+        <div class="gallery-item" *ngFor="let catalog of visibleCatalogs" [routerLink]="[ '/catalog', catalog.id ]">
             {{catalog.name}} <br>
             <img id="{{ 'image-' + catalog.id }}" alt="">
             <div class="details"></div>

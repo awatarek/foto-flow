@@ -9,7 +9,8 @@ import { ComponentsPanelComponent } from './components/components-panel/componen
 import { MainPanelComponent } from './components/main-panel/main-panel.component';
 import { CatalogPanelComponent } from './components/catalog-panel/catalog-panel.component';
 import { PhotoPanelComponent } from './components/photo-panel/photo-panel.component';
-
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,9 @@ import { PhotoPanelComponent } from './components/photo-panel/photo-panel.compon
     CommonModule,
     RouterModule.forChild(PanelRouter),
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatTableModule,
+    MatPaginatorModule
   ]
 })
 export class PanelModule { }

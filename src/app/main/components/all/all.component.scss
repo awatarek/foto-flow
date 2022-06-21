@@ -12,11 +12,36 @@
         }
     }
 
+    .pages{
+        min-height: 40px;
+        width: 100%;
+    
+        .page-list{
+            display: inline-block;
+            margin: auto;
+            text-align: center;
+        }
+    
+        .page{
+            cursor: pointer;
+            display: block;
+            float: left;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+    
+        .active{
+            background-color: green;
+            color: white;
+        }
+    }
+
     .gallery{
         display: grid;
         width: calc(100% - 30px);
         grid-gap: 10px;
-
 
         .gallery-item{
             width: 100%;
