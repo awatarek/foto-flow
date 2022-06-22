@@ -1,12 +1,34 @@
-<div class="block-info">
-    Zdjęcia po dodaniu nie będą widoczne dopóki nie zostaną zaakceptowane
-</div>
-
 <div>
     <form [formGroup]="form">
-        <input type="text" formControlName="location" placeholder="lokalizacja">
-        <input type="text" formControlName="author" placeholder="autor zdjęć">        
-        <input type="file" name="" id="" multiple (change)="fileChange($event)" name="image" enctype="multipart/form-data">
-        <button class="submit" (click)="sendFiles()"> Prześlij</button>
+        <div class="input">
+            <span>Lokalizacja</span>
+            <input type="text" pInputText formControlName="location"> 
+        </div>
+
+        <div class="input">
+            <span>Autor zdjęć</span>
+            <input type="text" pInputText formControlName="author"> 
+        </div>
+        
+        <p-fileUpload name="demo[]" (onSelect)="fileChange($event)"
+        [multiple]="true" [showUploadButton]="false" accept="image/*">
+            <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                </ul>
+            </ng-template>
+        </p-fileUpload>    
+
+        <div class="button">
+            <p>Przed wysłaniem sprawdź czy podgląd zdjęć został wczytany</p>
+            <p-button label="Prześlij" (click)="sendFiles()"></p-button>
+        </div>
     </form>
+</div>
+
+<p *ngIf="isUploading">{{uploaded}} / {{toUpload}}</p>
+<mat-progress-bar mode="query" *ngIf="isUploading"></mat-progress-bar><br><br>
+
+<div class="block-info" *ngIf="showSucessInfo">
+    Zdjęcia przesłana! Będzią one widoczne dopiero po zatwierdzeniu przez administratora.
 </div>

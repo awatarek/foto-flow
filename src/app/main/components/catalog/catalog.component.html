@@ -1,10 +1,12 @@
 <p class="header" *ngIf="catalogInfo">{{catalogInfo[0].name}}</p>
 
 <div class="buttons">
-    <button (click)="downloadAll()">Pobierz wszystkie</button>
+    <button (click)="downloadMultipleFile()">Pobierz wszystkie</button>
     <button (click)="chooseMultipleFile()">Pobierz Wybrane</button>
     <button (click)="downloadMultipleFile()" *ngIf="downloadMultiple">Pobierz ({{fileToDownload.length}})</button>
 </div>
+
+<mat-progress-bar mode="query" *ngIf="downloadInProgress"></mat-progress-bar><br><br>
 
 <div class="pages" *ngIf="numberOfPages != 1">
     <div class="page-list">

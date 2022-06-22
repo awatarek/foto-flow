@@ -23,14 +23,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     FormsModule
   ],
-  providers: [    
-    {
-    provide: GALLERY_CONFIG,
-    useValue: {
-      dots: true,
-      imageSize: 'cover'
-    }
-  }],
   bootstrap: [AppComponent]
 })
 

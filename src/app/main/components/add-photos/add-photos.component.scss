@@ -1,41 +1,37 @@
 .block-info{
     margin: 25px auto;
     border-radius: 5px;
-    color: white;
+    color: black;
     line-height: 2rem;
     font-weight: 500;
     text-align: center;
     min-height: 2rem;
-    background-color: rgb(226, 153, 153);
+    background-color: rgb(160, 255, 157);
 }
 
 form{
     width: 90%;
     max-width: 700px;
     margin: 30px auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 15px;
 
-    input{
-        height: 25px;
-        line-height: 23px;
-        padding: 7px;
-        border-radius: 5px;
-        border: 1px solid ghostwhite;
-        max-width: 350px;
+    .input{
+        margin: 10px 0;
     }
 
-    .submit{
-        min-width: 350px;
-        border: 1px solid grey;
-        background-color: whitesmoke;
-        margin: auto;
-        padding: 7px;
-        height: 40px;
-        border-radius: 5px;
-        line-height: 23px;
-        grid-auto-rows: 2fr;
+    input{
+        width: 100%;
+    }
+
+    .button{
+        margin: 10px 0;
+    }
+
+    p-fileupload{
+        margin: 10px 0;
+    }
+
+    p-button{
+        margin: 10px 0;
     }
 }
 
@@ -43,11 +39,6 @@ form{
 @media screen and (max-width: 750px) {
     form{
         grid-template-columns: 1fr;
-
-        input{
-            min-width: 350px;
-            margin: auto;
-        }
     }
 
     .block-info{

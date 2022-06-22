@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CatalogsService } from 'src/app/shared/service/catalogs.service';
 
@@ -11,6 +11,11 @@ export class AddCatalogComponent implements OnInit {
   public form: FormGroup;
   protected formBuilder: FormBuilder;
   public files: File[];
+  public uploadedFiles: any[] = [];
+  public isUploading: boolean = false;
+  public showSucessInfo: boolean = false;
+  public toUpload :number = 0;
+  public uploaded :number = 0;
 
   constructor(public catalogService: CatalogsService ) { }
 
@@ -23,8 +28,6 @@ export class AddCatalogComponent implements OnInit {
   }
 
   public async sendFiles(){
-    console.log(this.form.value)
-
     let formData:FormData = new FormData();
     if(this.files.length > 0) {
       for(var i =  0; i <  this.files.length; i++)  {
@@ -34,12 +37,25 @@ export class AddCatalogComponent implements OnInit {
     
     formData.append("data", JSON.stringify(this.form.value));
 
-    this.catalogService.createCatalog(formData);
+    let upload = this.catalogService.createCatalog(formData);
+    this.uploaded = 0;
+    this.toUpload = 0;
 
+    (await upload).subscribe((eve) =>{
+      console.log(eve)
+      if(eve.type == 0){
+        this.isUploading = true;
+      } else if(eve.type == 1){
+        this.toUpload = eve.total;
+        this.uploaded = eve.loaded;
+      }else if(eve.type == 4){
+        this.isUploading = false;
+        this.showSucessInfo = true;
+      }
+    })
   }
 
-  public fileChange(eve){
-    this.files = eve.target.files;
+  public fileChange(event){
+    this.files = event.currentFiles;
   }
-
 }

@@ -17,25 +17,37 @@ export class CatalogsService {
         return await this.http.get<Catalog[]>(this.url+"catalogs").toPromise();
     }
 
+    public async getAllCatalogs(): Promise<Catalog[]>{
+        return await this.http.get<Catalog[]>(this.url+"catalogs/all").toPromise();
+    }
+
     public async getFirstCatalogsPhoto(): Promise<Photo[]>{
         return await this.http.get<Photo[]>(this.url+"catalogs/photos").toPromise();
     }
 
+    public async setVisibleCatalog(catalogId: number, isTrue: boolean){
+        await this.http.post(this.url+"catalog/visible/"+catalogId, {"isTrue": `${isTrue}`}).toPromise();
+    }
+
+    public async setAcceptedCatalog(catalogId: number, isTrue: boolean){
+        await this.http.post(this.url+"catalog/accepted/"+catalogId, {"isTrue": `${isTrue}`}).toPromise();
+    }
+
     public async createCatalog(formData: FormData){
-        await this.http.post(this.url+"catalog/create", formData, {
+        return this.http.post(this.url+"catalog/create", formData, {
             reportProgress: true,
             responseType: 'json',
-        }).toPromise();
+            observe: "events"
+        });
     }
 
     public async addPhotoToCatalog(formData: FormData){
-        await this.http.post(this.url+"catalog/add", formData, {
+        return this.http.post(this.url+"catalog/add", formData, {
             reportProgress: true,
+            observe: "events",
             responseType: 'json',
-        }).toPromise();
+        });
     }
-
-
 
     public async getPhotosFromCatalog(catalogID: number){
         return await this.http.get<Photo[]>(this.url+"catalog/"+catalogID).toPromise()
@@ -44,8 +56,6 @@ export class CatalogsService {
         return await this.http.get<Catalog>(this.url+"catalog/details/"+catalogID).toPromise();
     }
 
-
-
     public async getPhoto(id: number): Promise<Blob>{
         return await this.http.get(this.url+"photo", { responseType: 'blob', params: {id: id} }).toPromise()
     }
@@ -53,6 +63,23 @@ export class CatalogsService {
     public async getMiniPhoto(id: number): Promise<Blob>{
         return await this.http.get(this.url+"photo/mini", { responseType: 'blob', params: {id: id} }).toPromise()
     }
+
+    public async removePhoto(name: string, catalog: number, photoId: number){
+        await this.http.post(this.url+"photo/remove", {"name": `${name}`, "catalog": `${catalog}`, "photoId": `${photoId}`}).toPromise();
+    }
+
+    public async getNotActivePhoto(){
+        return await this.http.get<Photo[]>(this.url+"photo/verify").toPromise()
+    }
+
+    public async setVisiblePhoto(photoId: number, isTrue: boolean){
+        await this.http.post(this.url+"photo/visible/"+photoId, {"isTrue": `${isTrue}`}).toPromise();
+    }
+
+    public async setAcceptedPhoto(photoId: number, isTrue: boolean){
+        await this.http.post(this.url+"photo/accepted/"+photoId, {"isTrue": `${isTrue}`}).toPromise();
+    }
+
 
     public async downloadMultiplePhoto(photos: Photo[], catalog: number){
         let params = new HttpParams();
@@ -63,7 +90,10 @@ export class CatalogsService {
             params = params.append('all', true)
         }
         params = params.append('catalog', catalog)
-        return await this.http.get(this.url+"photo/multiple", {responseType: 'blob', params: params}).toPromise();
+        //return await this.http.get(this.url+"photo/multiple", {responseType: 'blob', params: params}).toPromise();
+
+        return this.http.get(this.url+"photo/multiple", 
+        {responseType: 'blob',reportProgress: true, observe: "events", params: params});
     }
 
     public async getPhotoDetails(id: number): Promise<Photo>{

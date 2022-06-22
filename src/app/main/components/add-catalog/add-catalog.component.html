@@ -1,13 +1,43 @@
-<div class="block-info">
-    Galeria po dodaniu nie będzie widoczna dopóki nie zostanie zaakceptowana
-</div>
-
 <div>
     <form [formGroup]="form">
-        <input type="text" formControlName="name" placeholder="nazwa wydarzenia">
+        <!--<input type="text" formControlName="name" placeholder="nazwa wydarzenia">
         <input type="text" formControlName="location" placeholder="lokalizacja">
-        <input type="text" formControlName="author" placeholder="autor zdjęć">        
-        <input type="file" name="" id="" multiple (change)="fileChange($event)" name="image" enctype="multipart/form-data">
-        <button class="submit" (click)="sendFiles()"> Prześlij</button>
+        <input type="text" formControlName="author" placeholder="autor zdjęć">-->
+        <div class="input">
+            <span>Nazwa wydarzenia</span>
+            <input type="text" pInputText formControlName="name" > 
+        </div>
+
+        <div class="input">
+            <span>Lokalizacja</span>
+            <input type="text" pInputText formControlName="location"> 
+        </div>
+
+        <div class="input">
+            <span>Autor zdjęć</span>
+            <input type="text" pInputText formControlName="author"> 
+        </div>
+        
+        <p-fileUpload name="demo[]" (onSelect)="fileChange($event)"
+        [multiple]="true" [showUploadButton]="false" accept="image/*">
+            <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                </ul>
+            </ng-template>
+        </p-fileUpload>    
+
+        <!--<input type="file" name="" id="" multiple (change)="fileChange($event)" name="image" enctype="multipart/form-data">--->
+        <div class="button">
+            <p>Przed wysłaniem sprawdź czy podgląd zdjęć został wczytany</p>
+            <p-button label="Prześlij" (click)="sendFiles()"></p-button>
+        </div>
     </form>
+</div>
+
+<p *ngIf="isUploading">{{uploaded}} / {{toUpload}}</p>
+<mat-progress-bar mode="query" *ngIf="isUploading"></mat-progress-bar><br><br>
+
+<div class="block-info" *ngIf="showSucessInfo">
+    Galeria przesłana! Będzie ona widoczna dopiero po zatwierdzeniu przez administratora.
 </div>

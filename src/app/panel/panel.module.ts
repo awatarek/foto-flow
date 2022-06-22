@@ -8,9 +8,16 @@ import { MenuPanelComponent } from './components/menu-panel/menu-panel.component
 import { ComponentsPanelComponent } from './components/components-panel/components-panel.component';
 import { MainPanelComponent } from './components/main-panel/main-panel.component';
 import { CatalogPanelComponent } from './components/catalog-panel/catalog-panel.component';
-import { PhotoPanelComponent } from './components/photo-panel/photo-panel.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { CatalogPhotoPanelComponent } from './components/catalog-photo-panel/catalog-photo-panel.component';
+import { PhotoVerificationPanelComponent } from './components/photo-verification-panel/photo-verification-panel.component';
+import { MatSortModule } from '@angular/material/sort';
+import {TableModule} from 'primeng/table';
+import {ImageModule} from 'primeng/image';
+import {ButtonModule} from 'primeng/button';
+import {ToolbarModule} from 'primeng/toolbar';
+import {DialogModule} from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -19,7 +26,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     ComponentsPanelComponent,
     MainPanelComponent,
     CatalogPanelComponent,
-    PhotoPanelComponent
+    CatalogPhotoPanelComponent,
+    PhotoVerificationPanelComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +35,13 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     ReactiveFormsModule,
     FormsModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSortModule,
+    TableModule,
+    ImageModule,
+    ButtonModule,
+    ToolbarModule,
+    DialogModule
   ]
 })
 export class PanelModule { }

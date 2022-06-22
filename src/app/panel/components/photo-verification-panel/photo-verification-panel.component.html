@@ -1,0 +1,110 @@
+<p>photo-verification-panel works!</p>
+
+<p-table [value]="photos" [(selection)]="choosedPhotos" [rows]="10" [showCurrentPageReport]="true" [paginator]="true" [rowsPerPageOptions]="[10,25,50]">
+    <ng-template pTemplate="caption">
+        <div class="table-header">
+            Lista zdjęć niewidocznych
+        </div>
+        <br>
+        <p-toolbar>
+            <div class="p-toolbar-group-right">
+                <p-button icon="pi pi-check-circle" (click)="acceptPhotoChoosen()"></p-button> &nbsp;           
+                <p-button icon="pi pi-eye" (click)="visiblePhotoChoosen()"></p-button> &nbsp;
+            </div>
+        </p-toolbar>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th style="width: 5rem">
+                &nbsp;
+            </th>
+            <th pSortableColumn="id">
+                <div class="flex justify-content-between align-items-center">
+                    Id
+                </div>
+            </th>
+            <th pSortableColumn="name">
+                <div class="flex justify-content-between align-items-center">
+                    Nazwa
+                    <p-sortIcon field="name"></p-sortIcon>
+                </div>
+            </th>
+            <th pSortableColumn="author">
+                <div class="flex justify-content-between align-items-center">
+                    Autor
+                    <p-sortIcon field="author"></p-sortIcon>
+                </div>
+            </th>
+            <th pSortableColumn="upload_day">
+                <div class="flex justify-content-between align-items-center">
+                    Data wysłania
+                    <p-sortIcon field="upload_day"></p-sortIcon>
+                </div>
+            </th>
+            <th pSortableColumn="accepted">
+                <div class="flex justify-content-between align-items-center">
+                    Akceptowane
+                    <p-sortIcon field="accepted"></p-sortIcon>
+                </div>
+            </th>
+            <th pSortableColumn="visible">
+                <div class="flex justify-content-between align-items-center">
+                    Widoczne
+                    <p-sortIcon field="visible"></p-sortIcon>
+                </div>
+            </th>
+            <th style="width: 8rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-photo>
+        <tr class="p-selectable-row">
+            <td>
+                <p-tableCheckbox [value]="photo"></p-tableCheckbox>
+            </td>
+            <td>
+                <button (click)="showDialog(photo)" pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-outlined"></button>
+            </td>
+            <td>
+                {{photo.id}}
+            </td>
+            <td>
+                {{photo.name}}
+            </td>
+            <td>
+                {{photo.author}}
+            </td>
+            <td>
+                {{photo.upload_day | date}}
+            </td>
+            <td>
+                {{photo.accepted}}
+            </td>
+            <td>
+                {{photo.visible}}
+            </td>
+            <td>
+                <button pButton pRipple type="button" label="Usuń" class="p-button-rounded p-button-danger" (click)="removePhoto(photo)"></button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="9">Nie znaleziono żadnych zdjęć</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<p-dialog header="Podgląd zdjęcia" [(visible)]="display" [style]="{width: '70vw'}"  [modal]="true" [dismissableMask]="true">
+    <img src="" alt="" id="image">
+    <p-toolbar>
+        <div class="p-toolbar-group-right" *ngIf="itemDetail">
+            <p-button icon="pi pi-eye" *ngIf="!itemDetail.visible" (click)="visiblePhoto()"></p-button> &nbsp;
+            <p-button icon="pi pi-check-circle" *ngIf="!itemDetail.accepted" (click)="acceptPhoto()"></p-button> &nbsp;
+            <button pButton pRipple type="button" label="Usuń" class="p-button-rounded p-button-danger" (click)="removePhoto(itemDetail)"></button>
+        </div>
+    </p-toolbar>
+</p-dialog>

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Catalog } from 'src/app/shared/model/catalog.model';
 import { Photo } from 'src/app/shared/model/photo.model';
 import { CatalogsService } from 'src/app/shared/service/catalogs.service';
@@ -19,11 +19,14 @@ export class CatalogComponent implements OnInit {
   public downloadMultiple: boolean = false;
   public fileToDownload: Photo[] = [];
 
-  private numberOfPhotos = 50;
+  public downloadInProgress: boolean = false;
+
+  private numberOfPhotos = 25;
   public visiblePhoto: Photo[] = [];
   public page: number = 0;
   public pageArray: number[] = [];
   public numberOfPages: number = 1;
+
 
   constructor(private router: ActivatedRoute, private http: HttpClient, public dialog: MatDialog, private catalogsService: CatalogsService) { }
 
@@ -43,6 +46,7 @@ export class CatalogComponent implements OnInit {
 
     for(let i = (this.page*this.numberOfPhotos); i < maxPhoto; i++){
       this.visiblePhoto.push(this.photos[i]);
+      
       let data = await this.catalogsService.getMiniPhoto(this.photos[i].id);
       this.image.push({id: this.photos[i].id, blob: data});
 
@@ -70,18 +74,45 @@ export class CatalogComponent implements OnInit {
   }
 
   public async downloadMultipleFile(){
-    if(this.fileToDownload.length > 0){
-      let file = await this.catalogsService.downloadMultiplePhoto(this.fileToDownload, this.catalogId);
-      let url = URL.createObjectURL(file);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = "foto-flow.zip";
-      link.click();
+    let blob: Blob = null;
 
-  
-      this.fileToDownload = [];
-      this.downloadMultiple = false;
+    this.downloadInProgress = true;
+
+    if(this.fileToDownload.length > 0){
+      let download = await this.catalogsService.downloadMultiplePhoto(this.fileToDownload, this.catalogId);
+
+      download.subscribe(
+        (event)=>{
+            console.log(event);
+            if(event.type == 4){
+              blob=event.body;
+              this.download(blob);
+            }
+        }
+      );
+    } else {
+      let download = await this.catalogsService.downloadMultiplePhoto([], this.catalogId);
+      download.subscribe(
+        (event)=>{
+            if(event.type == 4){
+              blob=event.body;
+              this.download(blob);
+            }
+        }
+      );
     }
+  }
+
+  private download(blob: Blob){
+    let url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = "foto-flow.zip";
+    link.click();
+    this.fileToDownload = [];
+    this.downloadMultiple = false;
+
+    this.downloadInProgress = false;
   }
 
   public addToMany(id){
@@ -114,15 +145,6 @@ export class CatalogComponent implements OnInit {
 
       this.fileToDownload = photoArray;
     }
-  }
-
-  public async downloadAll(){
-    let file = await this.catalogsService.downloadMultiplePhoto([], this.catalogId);
-    let url = URL.createObjectURL(file);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = "foto-flow.zip";
-    link.click();
   }
 
   public classIsActive(id: number){
@@ -159,8 +181,6 @@ export class CatalogComponent implements OnInit {
     if((item-1) == this.page) return "active";
     return "";
   }
-  
-
 }
 
 @Component({
@@ -176,6 +196,7 @@ export class ImageDialog implements OnInit {
   public lastPhoto: Photo;
   public nextPhoto: Photo;
 
+
   constructor(
     public dialogRef: MatDialogRef<ImageDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -185,13 +206,15 @@ export class ImageDialog implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    console.log(this.data.images)
 
     this.isLoading = true;
-    let item = await this.catalogsService.getMiniPhoto(this.data.id);
-    let url = URL.createObjectURL(item);
-    let image = document.querySelector("img#image");
-    image.setAttribute("src", url)
+    for(let item of this.data.images){
+      if(item.id == this.data.id){
+        let url = URL.createObjectURL(item.blob);
+        let image = document.querySelector("img#image");
+        image.setAttribute("src", url)
+      }
+    }
 
     this.photo = await this.catalogsService.getPhotoDetails(this.data.id);
 
@@ -240,13 +263,29 @@ export class ImageDialog implements OnInit {
   }
 
   async setNewPhoto(newPhoto: Photo){
+
     this.isLoading = true;
     this.data.id = newPhoto.id;
-    let item = await this.catalogsService.getMiniPhoto(this.data.id);
-    let url = URL.createObjectURL(item);
-    let image = document.querySelector("img#image");
-    image.setAttribute("src", url)
     this.photo = await this.catalogsService.getPhotoDetails(this.data.id);
+
+    let isNull = true;
+
+    for(let item of this.data.images){
+      if(item.id == this.data.id){
+        let url = URL.createObjectURL(item.blob);
+        let image = document.querySelector("img#image");
+        image.setAttribute("src", url)
+        isNull = false;
+      }
+    }
+
+    if(isNull){
+      let data = await this.catalogsService.getMiniPhoto(this.data.id);
+      let url = URL.createObjectURL(data);
+      let image = document.querySelector("img#image");
+      image.setAttribute("src", url)
+    }
+
 
     let arrId = 0;
     for(let item of this.data.photos){

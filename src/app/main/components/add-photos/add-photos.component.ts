@@ -1,6 +1,7 @@
+import { HttpEvent } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CatalogsService } from 'src/app/shared/service/catalogs.service';
 
 @Component({
@@ -12,7 +13,12 @@ export class AddPhotosComponent implements OnInit {
   public form: FormGroup;
   protected formBuilder: FormBuilder;
   public files: File[];
+  public uploadedFiles: any[] = [];
+  public isUploading: boolean = false;
+  public showSucessInfo: boolean = false;
   public catalogId: number;
+  public toUpload :number = 0;
+  public uploaded :number = 0;
 
   constructor(public catalogService: CatalogsService, private router: ActivatedRoute ) { 
     this.catalogId = parseInt(this.router.snapshot.paramMap.get("id"));
@@ -28,8 +34,6 @@ export class AddPhotosComponent implements OnInit {
   }
 
   public async sendFiles(){
-    console.log(this.form.value)
-
     let formData:FormData = new FormData();
     if(this.files.length > 0) {
       for(var i =  0; i <  this.files.length; i++)  {
@@ -38,12 +42,28 @@ export class AddPhotosComponent implements OnInit {
     }
     
     formData.append("data", JSON.stringify(this.form.value));
-    this.catalogService.addPhotoToCatalog(formData);
 
+    let upload = this.catalogService.addPhotoToCatalog(formData);
+    this.uploaded = 0;
+    this.toUpload = 0;
+
+    (await upload).subscribe((eve: HttpEvent<Object>) =>{
+      if(eve){
+        if(eve.type == 0){
+          this.isUploading = true;
+        } else if(eve.type == 1){
+          this.toUpload = eve.total;
+          this.uploaded = eve.loaded;
+        }else if(eve.type == 4){
+          this.isUploading = false;
+          this.showSucessInfo = true;
+        }
+      }
+    });
   }
 
   public fileChange(eve){
-    this.files = eve.target.files;
+    this.files = eve.currentFiles;
   }
 
 }
