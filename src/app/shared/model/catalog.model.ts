@@ -3,5 +3,6 @@ export class Catalog{
     public name: string;
     public visible: boolean;
     public accepted: boolean;
+    public count?: number;
 }
   

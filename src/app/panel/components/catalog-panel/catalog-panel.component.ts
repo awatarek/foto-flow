@@ -13,28 +13,22 @@ import { CatalogsService } from 'src/app/shared/service/catalogs.service';
 export class CatalogPanelComponent implements OnInit {
   public catalogs: Catalog[] = [];
   public displayedColumns: string[] = ['name', 'visible', 'accepted', 'actions'];
-  public dataSource = new MatTableDataSource<Catalog>(this.catalogs);
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private cs: CatalogsService) { }
 
   async ngOnInit(): Promise<void> {
     this.catalogs = await this.cs.getAllCatalogs();
-    this.dataSource = new MatTableDataSource<Catalog>(this.catalogs);
   }
 
   public async changeVisibilityStatus(catalogId: number){
     let isTrue: boolean;
     for(let item of this.catalogs){
-      console.log(item)
       if(item.id == catalogId){
         isTrue = item.visible;
         item.visible = !item.visible;
         break;
       }
     }
-
     await this.cs.setVisibleCatalog(catalogId, (isTrue ? false : true));
   }
 

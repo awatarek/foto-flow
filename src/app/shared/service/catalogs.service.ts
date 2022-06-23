@@ -90,7 +90,6 @@ export class CatalogsService {
             params = params.append('all', true)
         }
         params = params.append('catalog', catalog)
-        //return await this.http.get(this.url+"photo/multiple", {responseType: 'blob', params: params}).toPromise();
 
         return this.http.get(this.url+"photo/multiple", 
         {responseType: 'blob',reportProgress: true, observe: "events", params: params});

@@ -1,36 +1,68 @@
-<div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-       
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef sortActionDescription="Sortuj przez nazwę"> Nazwa </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
+<p-table responsiveLayout="scroll" [value]="catalogs" [rows]="10" [showCurrentPageReport]="true" [paginator]="true" [rowsPerPageOptions]="[10,25,50]">
+    <ng-template pTemplate="caption">
+        <div class="table-header">
+            Galerie
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="name">
+                <div class="flex justify-content-between align-items-center">
+                    Nazwa
+                    <p-sortIcon field="name"></p-sortIcon>
+                </div>
+            </th>
+            <th pSortableColumn="count">
+                <div class="flex justify-content-between align-items-center">
+                    Liczba zdjęć
+                    <p-sortIcon field="count"></p-sortIcon>
+                </div>
+            </th>
+            <th pSortableColumn="visible">
+                <div class="flex justify-content-between align-items-center" style="width: 4rem">
+                    Widoczność
+                    <p-sortIcon field="visible"></p-sortIcon>
+                </div>
+            </th>
+            <th pSortableColumn="accepted" style="width: 5rem">
+                <div class="flex justify-content-between align-items-center">
+                    Zaakceptowane
+                    <p-sortIcon field="accepted"></p-sortIcon>
+                </div>
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-catalog>
+        <tr class="p-selectable-row">
+            <td>
+                {{catalog.name}}
+            </td>
+            <td>
+                {{catalog.count}}
+            </td>
+            <td>
+                {{catalog.accepted}}
+            </td>
+            <td>
+                {{catalog.visible}}
+            </td>
+            <td>
+                <button [routerLink]="[catalog.id]" pButton pRipple type="button" label="Zobacz" class="p-button-rounded p-button-primary"></button>
+            </td>
+            <td>
+                <button pButton pRipple type="button" label="Usuń" class="p-button-rounded p-button-danger"></button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="5">Nie znaleziono żadnych zdjęć</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog>
     
-        <ng-container matColumnDef="visible">
-            <th mat-header-cell *matHeaderCellDef> Widoczność </th>
-            <td mat-cell *matCellDef="let element"> 
-                <button mat-button (click)="changeVisibilityStatus(element.id)" [ngClass]="getClass(element.visible)">Zmień</button>
-            </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="accepted">
-            <th mat-header-cell *matHeaderCellDef> Akceptacja </th>
-            <td mat-cell *matCellDef="let element"> 
-                <button mat-button (click)="changeAcceptenceStatus(element.id)" [ngClass]="getClass(element.accepted)">Zmień</button>
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef> Edytuj </th>
-            <td mat-cell *matCellDef="let element"> 
-                <button mat-button [routerLink]="[element.id]">Edit</button>
-            </td>
-        </ng-container>
-
-        <mat-text-column name="score"></mat-text-column>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    </table>    
-</div>
+</p-dialog>

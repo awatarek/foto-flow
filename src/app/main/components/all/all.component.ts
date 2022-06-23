@@ -36,7 +36,7 @@ export class AllComponent implements OnInit {
       for(let ite of this.firstPhoto){
 
         if(ite.catalogs_id == item.id){
-          location = ite.fileLocation;
+          location = ite.name;
           photoId = ite.id;
         }
       }

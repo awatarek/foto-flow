@@ -1,6 +1,5 @@
-<p>photo-verification-panel works!</p>
 
-<p-table [value]="photos" [(selection)]="choosedPhotos" [rows]="10" [showCurrentPageReport]="true" [paginator]="true" [rowsPerPageOptions]="[10,25,50]">
+<p-table responsiveLayout="scroll"  (onPage)="paginate($event)" [value]="photos" [(selection)]="choosedPhotos" [rows]="10" [showCurrentPageReport]="true" [paginator]="true" [rowsPerPageOptions]="[10,25,50]">
     <ng-template pTemplate="caption">
         <div class="table-header">
             Lista zdjęć niewidocznych
@@ -10,21 +9,16 @@
             <div class="p-toolbar-group-right">
                 <p-button icon="pi pi-check-circle" (click)="acceptPhotoChoosen()"></p-button> &nbsp;           
                 <p-button icon="pi pi-eye" (click)="visiblePhotoChoosen()"></p-button> &nbsp;
-            </div>
+                <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-danger" (click)="removePhotoChoosen()"></button>            </div>
         </p-toolbar>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
-            <th style="width: 3rem">
+            <th style="width: 5rem">
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th style="width: 5rem">
+            <th style="width: 200px">
                 &nbsp;
-            </th>
-            <th pSortableColumn="id">
-                <div class="flex justify-content-between align-items-center">
-                    Id
-                </div>
             </th>
             <th pSortableColumn="name">
                 <div class="flex justify-content-between align-items-center">
@@ -65,10 +59,7 @@
                 <p-tableCheckbox [value]="photo"></p-tableCheckbox>
             </td>
             <td>
-                <button (click)="showDialog(photo)" pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-outlined"></button>
-            </td>
-            <td>
-                {{photo.id}}
+                <p-image (click)="showPhoto(photo.id)" src="assets/non-photo.png" alt="Image" width="150" [preview]="true" imageClass="{{ 'image-' + photo.id}}"></p-image>
             </td>
             <td>
                 {{photo.name}}
@@ -96,15 +87,3 @@
         </tr>
     </ng-template>
 </p-table>
-
-
-<p-dialog header="Podgląd zdjęcia" [(visible)]="display" [style]="{width: '70vw'}"  [modal]="true" [dismissableMask]="true">
-    <img src="" alt="" id="image">
-    <p-toolbar>
-        <div class="p-toolbar-group-right" *ngIf="itemDetail">
-            <p-button icon="pi pi-eye" *ngIf="!itemDetail.visible" (click)="visiblePhoto()"></p-button> &nbsp;
-            <p-button icon="pi pi-check-circle" *ngIf="!itemDetail.accepted" (click)="acceptPhoto()"></p-button> &nbsp;
-            <button pButton pRipple type="button" label="Usuń" class="p-button-rounded p-button-danger" (click)="removePhoto(itemDetail)"></button>
-        </div>
-    </p-toolbar>
-</p-dialog>

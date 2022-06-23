@@ -17,7 +17,7 @@
 </div>
 
 <div class="gallery">
-    <div *ngFor="let item of visiblePhoto" class="gallery-item" (click)="openDialog(item.id); addToMany(item.id)" [ngClass]="classIsActive(item.id)">
+    <div *ngFor="let item of visiblePhoto" class="gallery-item" (click)="openDialog(item); addToMany(item.id)" [ngClass]="classIsActive(item.id)">
         <img id="{{ 'image-' + item.id }}" alt="">
         <div class="details">
             Name: {{item.name}}<br>
@@ -27,3 +27,44 @@
         </div>
     </div>
 </div>
+
+<p-dialog [(visible)]="display"  [modal]="true" [style]="{width: '50vw'}"
+[dismissableMask]="true" [draggable]="false" [resizable]="false">
+<div class="dialog">
+    <div class="over-image">
+        <img id="image" [src]="imageUrl" alt="">
+    </div>
+    <br>
+    <div>
+        <div *ngIf="!isLoading">
+            <span>Nazwa: {{photoDetail.name}}</span><br>
+            <span>Tagi: {{photoDetail.tags}}</span><br>
+            <span>Lokacja: {{photoDetail.location}}</span><br>
+            <span>Autor: {{photoDetail.author}}</span><br>
+            <span>Data: {{photoDetail.upload_day | date}}</span><br><br><br>
+            <mat-chip-list>
+                <mat-chip *ngFor="let tag of tags" color="accent" >{{tag}}</mat-chip>
+            </mat-chip-list>
+        </div>
+
+        <div *ngIf="isLoading" class="dialog-info-loading">
+        </div>
+
+        <br>
+        <br>
+        <div class="buttons">
+            <button *ngIf="lastPhoto" (click)="onLast()">Last</button>
+            <div *ngIf="!lastPhoto"></div>
+
+            <button (click)="dialogDownload()">
+                <mat-icon>download</mat-icon>
+            </button>
+
+            <button *ngIf="nextPhoto" (click)="onNext()">Next</button>
+            <div *ngIf="!nextPhoto"></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+
+</p-dialog>

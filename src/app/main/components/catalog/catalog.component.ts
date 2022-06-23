@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ɵbypassSanitizationTrustUrl } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Catalog } from 'src/app/shared/model/catalog.model';
 import { Photo } from 'src/app/shared/model/photo.model';
@@ -27,8 +28,19 @@ export class CatalogComponent implements OnInit {
   public pageArray: number[] = [];
   public numberOfPages: number = 1;
 
+  /*Dialog variables*/
+  public display: boolean = false;
+  public photoDetail: Photo;
+  public isLoading: boolean = true;
+  public tags: string[] = [];
+  public lastPhoto: Photo;
+  public nextPhoto: Photo;
+  public imageUrl: SafeUrl;
 
-  constructor(private router: ActivatedRoute, private http: HttpClient, public dialog: MatDialog, private catalogsService: CatalogsService) { }
+
+  constructor(private router: ActivatedRoute, private http: HttpClient, 
+    private catalogsService: CatalogsService,
+    private sanitizer: DomSanitizer) { }
 
   async ngOnInit(): Promise<void> {
     this.catalogId = parseInt(this.router.snapshot.paramMap.get("id"));
@@ -54,18 +66,6 @@ export class CatalogComponent implements OnInit {
       let image = document.querySelector("img#image-"+this.photos[i].id);
       image.setAttribute("src", url)
     }
-  }
-
-  public openDialog(id): void{
-    if(this.downloadMultiple) return;
-      const dialogRef = this.dialog.open(ImageDialog, {
-        width: '720px',
-        data: {id: id, photos: this.photos, images: this.image},
-      });
-  
-      dialogRef.afterClosed().subscribe(result => {
-      });
-
   }
 
   public chooseMultipleFile(){
@@ -157,7 +157,6 @@ export class CatalogComponent implements OnInit {
     return "";
   }
 
-
   public async setPage(page: number){
     this.visiblePhoto = [];
     this.page = page - 1;
@@ -181,76 +180,46 @@ export class CatalogComponent implements OnInit {
     if((item-1) == this.page) return "active";
     return "";
   }
-}
 
-@Component({
-  selector: 'image-dialog',
-  templateUrl: 'image-dialog.html',
-  styleUrls: ['./catalog.component.scss']
-})
-export class ImageDialog implements OnInit {
-  public photo: Photo = null;
-  public isLoading: boolean = true;
-  public tags: string[] = [];
+  /*-------------------------------------------------------*/ 
 
-  public lastPhoto: Photo;
-  public nextPhoto: Photo;
-
-
-  constructor(
-    public dialogRef: MatDialogRef<ImageDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private http: HttpClient,
-    private catalogsService: CatalogsService
-  ) {
-  }
-
-  async ngOnInit(): Promise<void> {
-
+  public async openDialog(photo: Photo){
     this.isLoading = true;
-    for(let item of this.data.images){
-      if(item.id == this.data.id){
-        let url = URL.createObjectURL(item.blob);
-        let image = document.querySelector("img#image");
-        image.setAttribute("src", url)
-      }
+    this.photoDetail = photo;
+    this.display = true;
+    if(this.photoDetail.tags){
+      this.tags = photo.tags.split(",");
     }
 
-    this.photo = await this.catalogsService.getPhotoDetails(this.data.id);
+    let isFound = false;
 
-    let arrId = 0;
-    for(let item of this.data.photos){
-      if(item.id == this.data.id){
+    for(let item of this.image){
+      if(item.id == photo.id){
+        let url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(item.blob));
+        this.imageUrl = url;
+        isFound = true;
         break;
-      } else {
-        arrId++;
       }
     }
 
-    this.photo.tags = "test, test2, test3, test4";
-
-    if(this.photo.tags){
-      this.tags = this.photo.tags.split(",")
+    if(!isFound){
+      let file = await this.catalogsService.getPhoto(this.photoDetail.id);
+      let url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(file));
+      this.imageUrl = url;
+      isFound = true;
     }
 
-
-    if(arrId > 0){
-      this.lastPhoto = this.data.photos[arrId - 1];
-    }
-
-    if(arrId < this.data.photos.length){
-      this.nextPhoto = this.data.photos[arrId + 1];
-    }
+    this.setNewPhoto(this.photoDetail)
 
     this.isLoading = false;
   }
 
-  public async download(){
-    let file = await this.catalogsService.getPhoto(this.data.id);
+  public async dialogDownload(){
+    let file = await this.catalogsService.getPhoto(this.photoDetail.id);
     let url = URL.createObjectURL(file);
     const link = document.createElement('a');
     link.href = url;
-    link.download = this.photo[0].name;
+    link.download = this.photoDetail.name;
     link.click();
   }
 
@@ -265,13 +234,14 @@ export class ImageDialog implements OnInit {
   async setNewPhoto(newPhoto: Photo){
 
     this.isLoading = true;
-    this.data.id = newPhoto.id;
-    this.photo = await this.catalogsService.getPhotoDetails(this.data.id);
+    this.photoDetail.id = newPhoto.id;
+    this.photoDetail = await this.catalogsService.getPhotoDetails(this.photoDetail.id);
+    this.photoDetail = this.photoDetail[0];
 
     let isNull = true;
 
-    for(let item of this.data.images){
-      if(item.id == this.data.id){
+    for(let item of this.image){
+      if(item.id == this.photoDetail.id){
         let url = URL.createObjectURL(item.blob);
         let image = document.querySelector("img#image");
         image.setAttribute("src", url)
@@ -280,16 +250,15 @@ export class ImageDialog implements OnInit {
     }
 
     if(isNull){
-      let data = await this.catalogsService.getMiniPhoto(this.data.id);
+      let data = await this.catalogsService.getMiniPhoto(this.photoDetail.id);
       let url = URL.createObjectURL(data);
       let image = document.querySelector("img#image");
       image.setAttribute("src", url)
     }
 
-
     let arrId = 0;
-    for(let item of this.data.photos){
-      if(item.id == this.data.id){
+    for(let item of this.image){
+      if(item.id == this.photoDetail.id){
         break;
       } else {
         arrId++;
@@ -300,11 +269,11 @@ export class ImageDialog implements OnInit {
     this.nextPhoto = null;
 
     if(arrId > 0){
-      this.lastPhoto = this.data.photos[arrId - 1];
+      this.lastPhoto = this.photos[arrId - 1];
     }
 
-    if(arrId < this.data.photos.length){
-      this.nextPhoto = this.data.photos[arrId + 1];
+    if(arrId < this.photos.length){
+      this.nextPhoto = this.photos[arrId + 1];
     }
     this.isLoading = false;
   }
