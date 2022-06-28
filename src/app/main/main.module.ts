@@ -16,6 +16,8 @@ import {FileUploadModule} from 'primeng/fileupload';
 import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
+import { PhotoSearchComponent } from './components/photo-search/photo-search.component';
+import {SidebarModule} from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import {DialogModule} from 'primeng/dialog';
     CatalogComponent,
     NotFoundComponent,
     AddPhotosComponent,
-    AddCatalogComponent
+    AddCatalogComponent,
+    PhotoSearchComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +40,8 @@ import {DialogModule} from 'primeng/dialog';
     FileUploadModule,
     InputTextModule,
     ButtonModule,
-    DialogModule
+    DialogModule,
+    SidebarModule,
   ]
 })
 export class MainModule { }

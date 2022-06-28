@@ -18,6 +18,7 @@ import {ImageModule} from 'primeng/image';
 import {ButtonModule} from 'primeng/button';
 import {ToolbarModule} from 'primeng/toolbar';
 import {DialogModule} from 'primeng/dialog';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import {DialogModule} from 'primeng/dialog';
     ImageModule,
     ButtonModule,
     ToolbarModule,
-    DialogModule
+    DialogModule,
+    SidebarModule,
   ]
 })
 export class PanelModule { }

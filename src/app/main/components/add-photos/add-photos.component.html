@@ -21,7 +21,7 @@
 
         <div class="button">
             <p>Przed wysłaniem sprawdź czy podgląd zdjęć został wczytany</p>
-            <p-button label="Prześlij" (click)="sendFiles()"></p-button>
+            <p-button label="Prześlij" (click)="sendFiles()" [disabled]="isUploading"></p-button>
         </div>
     </form>
 </div>

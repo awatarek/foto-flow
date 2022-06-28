@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Photo } from 'src/app/shared/model/photo.model';
 import { CatalogsService } from 'src/app/shared/service/catalogs.service';
@@ -10,6 +10,7 @@ import { CatalogsService } from 'src/app/shared/service/catalogs.service';
 })
 export class CatalogPhotoPanelComponent implements OnInit {
   public photos: Photo[] = [];
+  public photosWithSort: Photo[] = [];
   public choosedPhotos: Photo[] = [];
   public itemDetail: Photo;
   public catalogId = 0;
@@ -17,11 +18,26 @@ export class CatalogPhotoPanelComponent implements OnInit {
   public rows = 10;
   display: boolean = false;
 
+  @ViewChild('tableElement') tableElement;
+
+  ngAfterViewInit() {
+      console.log(this.tableElement);
+      this.tableElement.onSort.subscribe(data => {
+        this.photosWithSort = this.tableElement.value;
+        console.log(this.photosWithSort);
+        console.log(this.tableElement);
+        console.log(data);
+
+        this.paginate({first: 0, rows: this.rows})
+      });
+  }
+
   constructor(private cs: CatalogsService, private router: ActivatedRoute) { }
 
   async ngOnInit(): Promise<void> {
     this.catalogId = this.router.snapshot.params.id;
     this.photos = await this.cs.getPhotosFromCatalog(this.catalogId);
+    this.photosWithSort = this.photos;
     await this.paginate({first: this.first, rows: this.rows});
   }
 
@@ -45,11 +61,11 @@ export class CatalogPhotoPanelComponent implements OnInit {
     this.rows = event.rows;
 
     let maxPhoto = event.first+event.rows;
-    if(maxPhoto > this.photos.length) maxPhoto = this.photos.length;
+    if(maxPhoto > this.photosWithSort.length) maxPhoto = this.photosWithSort.length;
     
 
     for(let i = event.first; i < maxPhoto; i++){
-      let photo: Photo = this.photos[i];
+      let photo: Photo = this.photosWithSort[i];
       let data = await this.cs.getMiniPhoto(photo.id);
 
       let url = URL.createObjectURL(data);
@@ -95,5 +111,11 @@ export class CatalogPhotoPanelComponent implements OnInit {
       this.cs.setVisiblePhoto(item.id, true);
     }
   }
+
+  public sortEvent(event){
+    console.log(event)
+  }
+
+
 
 }

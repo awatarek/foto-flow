@@ -10,6 +10,14 @@ export class MainComponent implements OnInit {
   public isCatalog: boolean = false;
   public isAdd: boolean = false;
   public catalogId: string = "";
+  public displaySideMenu: boolean = false;
+  public isMobile: boolean = false;
+  
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.isMobile = window.innerWidth < 900;
+  }
+
 
   constructor(private router: Router) {
     router.events.subscribe((val) =>{
@@ -31,5 +39,6 @@ export class MainComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.isMobile = window.innerWidth < 900;
   }
 }

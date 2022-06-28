@@ -1,10 +1,19 @@
 <div class="header">
     <img src="assets\Krzyz_FSE.png" alt="" [routerLink]="['/']">
-    <div class="menu">
+    <div class="search">
+        <span class="p-input-icon-left" *ngIf="!isMobile">
+            <i class="pi pi-search"></i>
+            <input type="text" pInputText placeholder="Wyszukiwarka">         
+        </span>
+    </div>
+    <div class="menu" *ngIf="!isMobile">
         <div [routerLink]="['/add-catalog']" *ngIf="!isCatalog && !isAdd">Dodaj galerie</div>
         <div [routerLink]="['/add-photos', catalogId]" *ngIf="isCatalog && !isAdd">Dodaj zdjęcia</div>
         <span *ngIf="isAdd"></span>
         <div [routerLink]="['/']">Strona główna</div>
+    </div>
+    <div *ngIf="isMobile" class="menu-bar">
+        <button pButton pRipple icon="pi pi-bars" (click)="displaySideMenu = true;"></button>
     </div>
 </div>
 
@@ -12,6 +21,11 @@
     <router-outlet></router-outlet>
 </div>
 
-<!--<div class="footer">
-    <div>Coś nie działa? Masz pomysł na usprawnienia? napisz maila na: <a href="mailto:kontakt@bartoszkrupa.pl">kontakt@bartoszkrupa.pl</a></div>
-</div>-->
+<p-sidebar [(visible)]="displaySideMenu" position="right">
+    <div class="mobile-menu">
+        <div [routerLink]="['/']">Strona główna</div>
+        <div [routerLink]="['/add-catalog']" *ngIf="!isCatalog && !isAdd">Dodaj galerie</div>
+        <div [routerLink]="['/add-photos', catalogId]" *ngIf="isCatalog && !isAdd">Dodaj zdjęcia</div>
+        <div *ngIf="isAdd"></div>
+    </div>
+</p-sidebar>

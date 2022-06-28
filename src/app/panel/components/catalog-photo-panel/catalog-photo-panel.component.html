@@ -1,4 +1,5 @@
-<p-table responsiveLayout="scroll"  (onPage)="paginate($event)" [value]="photos" [(selection)]="choosedPhotos" [rows]="10" [showCurrentPageReport]="true" [paginator]="true" [rowsPerPageOptions]="[10,25,50]">
+<p-table #tableElement responsiveLayout="scroll"  (onPage)="paginate($event)" [value]="photos" [(selection)]="choosedPhotos" [rows]="10" 
+[showCurrentPageReport]="true" [paginator]="true" [rowsPerPageOptions]="[10,25,50]" (onSort)="sortEvent($event)">
     <ng-template pTemplate="caption">
         <div class="table-header">
             Zdjęcia w galeri
@@ -21,31 +22,31 @@
             <th style="width: 200px">
                 &nbsp;
             </th>
-            <th pSortableColumn="name">
+            <th pSortableColumn="name" >
                 <div class="flex justify-content-between align-items-center">
                     Nazwa
                     <p-sortIcon field="name"></p-sortIcon>
                 </div>
             </th>
-            <th pSortableColumn="author">
+            <th pSortableColumn="author" >
                 <div class="flex justify-content-between align-items-center">
                     Autor
                     <p-sortIcon field="author"></p-sortIcon>
                 </div>
             </th>
-            <th pSortableColumn="upload_day">
+            <th pSortableColumn="upload_day" >
                 <div class="flex justify-content-between align-items-center">
                     Data wysłania
                     <p-sortIcon field="upload_day"></p-sortIcon>
                 </div>
             </th>
-            <th pSortableColumn="accepted"  style="width: 1rem">
+            <th pSortableColumn="accepted"  style="width: 1rem" >
                 <div class="flex justify-content-between align-items-center">
                     Akceptowane
                     <p-sortIcon field="accepted"></p-sortIcon>
                 </div>
             </th>
-            <th pSortableColumn="visible"  style="width: 1rem">
+            <th pSortableColumn="visible"  style="width: 1rem" >
                 <div class="flex justify-content-between align-items-center">
                     Widoczne
                     <p-sortIcon field="visible"></p-sortIcon>

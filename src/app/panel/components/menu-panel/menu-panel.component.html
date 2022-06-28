@@ -1,9 +1,20 @@
 <div class="content">
     <img src="/assets/Krzyz_FSE.png" alt="">
-    <div class="menu-item menu-main" [routerLink]="['/panel']">Strona główna</div>
-    <div class="menu-item" [routerLink]="['catalogs']">Galerie</div>
-    <div class="menu-item" [routerLink]="['verification']">Weryfikacja</div>
-    <div class="menu"></div>
-    <div class="menu"></div>
-    <div class="menu-item" [routerLink]="['']">Wyloguj</div>
+    <div class="menu-item menu-main" [routerLink]="['/panel']" *ngIf="!isMobile">Strona główna</div>
+    <div class="menu-item" [routerLink]="['catalogs']"  *ngIf="!isMobile">Galerie</div>
+    <div class="menu-item" [routerLink]="['verification']"  *ngIf="!isMobile">Weryfikacja</div>
+    <div class="menu-item" [routerLink]="['']"  *ngIf="!isMobile">Wyloguj</div>
+
+    <div *ngIf="isMobile" class="menu-bar">
+        <button pButton pRipple icon="pi pi-bars" (click)="displaySideMenu = true;"></button>
+    </div>
 </div>
+
+<p-sidebar [(visible)]="displaySideMenu" position="right">
+    <div class="mobile-content">
+        <div class="menu-mobile-item menu-main" [routerLink]="['/panel']">Strona główna</div>
+        <div class="menu-mobile-item" [routerLink]="['catalogs']">Galerie</div>
+        <div class="menu-mobile-item" [routerLink]="['verification']">Weryfikacja</div>
+        <div class="menu-mobile-item" [routerLink]="['']">Wyloguj</div>
+    </div>
+</p-sidebar>

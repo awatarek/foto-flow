@@ -34,6 +34,10 @@ export class AddPhotosComponent implements OnInit {
   }
 
   public async sendFiles(){
+    if(this.files.length == 0){
+      return;
+    }
+    this.isUploading = true;
     let formData:FormData = new FormData();
     if(this.files.length > 0) {
       for(var i =  0; i <  this.files.length; i++)  {
@@ -60,6 +64,7 @@ export class AddPhotosComponent implements OnInit {
         }
       }
     });
+    this.form.reset();
   }
 
   public fileChange(eve){
