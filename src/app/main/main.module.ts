@@ -18,6 +18,9 @@ import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
 import { PhotoSearchComponent } from './components/photo-search/photo-search.component';
 import {SidebarModule} from 'primeng/sidebar';
+import {TreeSelectModule} from 'primeng/treeselect';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
+import {AccordionModule} from 'primeng/accordion';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,10 @@ import {SidebarModule} from 'primeng/sidebar';
     InputTextModule,
     ButtonModule,
     DialogModule,
+    TreeSelectModule,
     SidebarModule,
+    OverlayPanelModule,
+    AccordionModule,
   ]
 })
 export class MainModule { }

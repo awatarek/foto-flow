@@ -1,6 +1,10 @@
 table {
     width: 100%;
 
+    .td{
+        background-color: #f8f9fa!important;
+    }
+
     button{
         padding: 5px;
         background-color: transparent;
@@ -20,5 +24,43 @@ table {
 
     .false{
         background-color: rgb(255, 154, 154);
+    }
+}
+
+.dialog-content{
+    width: 100%;
+    min-height: 500px;
+    
+    img{
+        display: block;
+        max-height: 300px;
+        margin: auto;
+        text-align: center;
+    }
+}
+
+form{
+    width: 90%;
+    max-width: 700px;
+    margin: 30px auto;
+
+    .input{
+        margin: 10px 0;
+    }
+
+    input{
+        width: 100%;
+    }
+
+    .button{
+        margin: 10px 0;
+    }
+
+    p-fileupload{
+        margin: 10px 0;
+    }
+
+    p-button{
+        margin: 10px 0;
     }
 }

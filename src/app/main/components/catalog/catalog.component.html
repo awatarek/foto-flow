@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="display"  [modal]="true" [style]="{width: '50vw'}"
+<p-dialog [(visible)]="display" [modal]="true" [style]="{width: '50vw'}"
 [dismissableMask]="true" [draggable]="false" [resizable]="false">
 <div class="dialog">
     <div class="over-image">
@@ -38,12 +38,11 @@
     <div>
         <div *ngIf="!isLoading">
             <span>Nazwa: {{photoDetail.name}}</span><br>
-            <span>Tagi: {{photoDetail.tags}}</span><br>
             <span>Lokacja: {{photoDetail.location}}</span><br>
             <span>Autor: {{photoDetail.author}}</span><br>
             <span>Data: {{photoDetail.upload_day | date}}</span><br><br><br>
             <mat-chip-list>
-                <mat-chip *ngFor="let tag of tags" color="accent" >{{tag}}</mat-chip>
+                <mat-chip *ngFor="let tag of tags" color="accent" >{{translateTag(tag)}}</mat-chip>
             </mat-chip-list>
         </div>
 

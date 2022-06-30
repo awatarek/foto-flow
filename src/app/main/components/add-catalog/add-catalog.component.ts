@@ -9,7 +9,6 @@ import { CatalogsService } from 'src/app/shared/service/catalogs.service';
 })
 export class AddCatalogComponent implements OnInit {
   public form: FormGroup;
-  protected formBuilder: FormBuilder;
   public files: File[];
   public uploadedFiles: any[] = [];
   public isUploading: boolean = false;
@@ -23,7 +22,7 @@ export class AddCatalogComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl(''),
       location: new FormControl(''),
-      author: new FormControl('')
+      tags: new FormControl('')
     });
   }
 

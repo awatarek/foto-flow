@@ -19,6 +19,10 @@ import {ButtonModule} from 'primeng/button';
 import {ToolbarModule} from 'primeng/toolbar';
 import {DialogModule} from 'primeng/dialog';
 import { SidebarModule } from 'primeng/sidebar';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {InputTextModule} from 'primeng/inputtext';
+import {CheckboxModule} from 'primeng/checkbox';
+import {TreeSelectModule} from 'primeng/treeselect';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,7 @@ import { SidebarModule } from 'primeng/sidebar';
     MainPanelComponent,
     CatalogPanelComponent,
     CatalogPhotoPanelComponent,
-    PhotoVerificationPanelComponent
+    PhotoVerificationPanelComponent,
   ],
   imports: [
     CommonModule,
@@ -44,6 +48,10 @@ import { SidebarModule } from 'primeng/sidebar';
     ToolbarModule,
     DialogModule,
     SidebarModule,
+    MultiSelectModule,
+    InputTextModule,
+    CheckboxModule,
+    TreeSelectModule,
   ]
 })
 export class PanelModule { }

@@ -1,17 +1,18 @@
 <div class="header">
     <img src="assets\Krzyz_FSE.png" alt="" [routerLink]="['/']">
+
     <div class="search">
-        <span class="p-input-icon-left" *ngIf="!isMobile">
-            <i class="pi pi-search"></i>
-            <input type="text" pInputText placeholder="Wyszukiwarka">         
-        </span>
+        <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded p-button-text" *ngIf="!isMobile"
+        (click)="op.toggle($event)"></button>
     </div>
+
     <div class="menu" *ngIf="!isMobile">
         <div [routerLink]="['/add-catalog']" *ngIf="!isCatalog && !isAdd">Dodaj galerie</div>
         <div [routerLink]="['/add-photos', catalogId]" *ngIf="isCatalog && !isAdd">Dodaj zdjęcia</div>
         <span *ngIf="isAdd"></span>
         <div [routerLink]="['/']">Strona główna</div>
     </div>
+
     <div *ngIf="isMobile" class="menu-bar">
         <button pButton pRipple icon="pi pi-bars" (click)="displaySideMenu = true;"></button>
     </div>
@@ -23,9 +24,61 @@
 
 <p-sidebar [(visible)]="displaySideMenu" position="right">
     <div class="mobile-menu">
-        <div [routerLink]="['/']">Strona główna</div>
-        <div [routerLink]="['/add-catalog']" *ngIf="!isCatalog && !isAdd">Dodaj galerie</div>
-        <div [routerLink]="['/add-photos', catalogId]" *ngIf="isCatalog && !isAdd">Dodaj zdjęcia</div>
-        <div *ngIf="isAdd"></div>
+        <a [routerLink]="['/']">Strona główna</a>
+        <a [routerLink]="['/add-catalog']" *ngIf="!isCatalog && !isAdd">Dodaj galerie</a>
+        <a [routerLink]="['/add-photos', catalogId]" *ngIf="isCatalog && !isAdd">Dodaj zdjęcia</a>
+        <a *ngIf="isAdd"></a>
+
+        <p-accordion>
+            <p-accordionTab header="Wyszukiwanie">
+                <form [formGroup]="form" class="mobile-form">
+                    <div class="input">
+                        <span>Nazwa</span>
+                        <input type="text" pInputText formControlName="name"> 
+                    </div>
+            
+                    <div class="input">
+                        <span>Lokalizacja</span>
+                        <input type="text" pInputText formControlName="location"> 
+                    </div>
+            
+                    <div class="input">
+                        <span>Autor</span>
+                        <input type="text" pInputText formControlName="author"> 
+                    </div>
+            
+                    <div class="input">
+                        <span>Tagi</span><br>
+                        <p-treeSelect formControlName="tags" selectionMode="checkbox" [options]="searchItems" placeholder="Wybierz Tag"></p-treeSelect>
+                    </div>
+                    <p-button (click)="searchPhotos()" icon="pi pi-search"></p-button>
+                </form>
+            </p-accordionTab>
+        </p-accordion>    
     </div>
 </p-sidebar>
+
+<p-overlayPanel #op position="top" [baseZIndex]="10000">
+    <form [formGroup]="form">
+        <div class="input">
+            <span>Nazwa</span>
+            <input type="text" pInputText formControlName="name"> 
+        </div>
+
+        <div class="input">
+            <span>Lokalizacja</span>
+            <input type="text" pInputText formControlName="location"> 
+        </div>
+
+        <div class="input">
+            <span>Autor</span>
+            <input type="text" pInputText formControlName="author"> 
+        </div>
+
+        <div class="input">
+            <span>Tagi</span><br>
+            <p-treeSelect formControlName="tags" selectionMode="checkbox" [options]="searchItems" placeholder="Wybierz Tag"></p-treeSelect>
+        </div>
+        <p-button (click)="searchPhotos()" icon="pi pi-search"></p-button>
+    </form>
+</p-overlayPanel>

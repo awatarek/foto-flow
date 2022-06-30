@@ -52,12 +52,21 @@ export class CatalogsService {
     public async getPhotosFromCatalog(catalogID: number){
         return await this.http.get<Photo[]>(this.url+"catalog/"+catalogID).toPromise()
     }
+
     public async getCatalogDetails(catalogID: number): Promise<any>{
         return await this.http.get<Catalog>(this.url+"catalog/details/"+catalogID).toPromise();
     }
 
+    public async editPhoto(formData: any){
+        return this.http.post(this.url+"photo/edit", formData).toPromise();
+    }
+
+    public async getAllPhotos(){
+        return await this.http.get<Photo[]>(this.url+"photo/all").toPromise();
+    }
+
     public async getPhoto(id: number): Promise<Blob>{
-        return await this.http.get(this.url+"photo", { responseType: 'blob', params: {id: id} }).toPromise()
+        return await this.http.get(this.url+"photo/full", { responseType: 'blob', params: {id: id} }).toPromise()
     }
 
     public async getMiniPhoto(id: number): Promise<Blob>{
@@ -97,5 +106,17 @@ export class CatalogsService {
 
     public async getPhotoDetails(id: number): Promise<Photo>{
         return await this.http.get<Photo>(this.url+"photo/details", { params: {id: id} }).toPromise()
+    }
+
+    public async getTags(){
+        return await this.http.get<{data: string, label: string, type: number}[]>(this.url+"tags").toPromise()
+    }
+
+    public async getPhotoWithNoTags(){
+        return await this.http.get<Photo[]>(this.url+"photo/noTag").toPromise()
+    }
+
+    public async getSearchPhoto(data: any){
+        return await this.http.post<Photo[]>(this.url+"photo/search", {data}).toPromise();
     }
 }

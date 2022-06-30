@@ -1,7 +1,9 @@
 <div class="content">
     <img src="/assets/Krzyz_FSE.png" alt="">
     <div class="menu-item menu-main" [routerLink]="['/panel']" *ngIf="!isMobile">Strona główna</div>
+    <div class="menu-item" [routerLink]="['catalogs', 0]"  *ngIf="!isMobile">Zdjęcia</div>
     <div class="menu-item" [routerLink]="['catalogs']"  *ngIf="!isMobile">Galerie</div>
+    <div class="menu-item" [routerLink]="['catalogs', 'tags']"  *ngIf="!isMobile">Tagi</div>
     <div class="menu-item" [routerLink]="['verification']"  *ngIf="!isMobile">Weryfikacja</div>
     <div class="menu-item" [routerLink]="['']"  *ngIf="!isMobile">Wyloguj</div>
 

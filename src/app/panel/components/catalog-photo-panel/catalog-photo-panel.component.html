@@ -1,10 +1,12 @@
-<p-table #tableElement responsiveLayout="scroll"  (onPage)="paginate($event)" [value]="photos" [(selection)]="choosedPhotos" [rows]="10" 
-[showCurrentPageReport]="true" [paginator]="true" [rowsPerPageOptions]="[10,25,50]" (onSort)="sortEvent($event)">
+<p-table [columns]="selectedColumns" #tableElement responsiveLayout="scroll"  (onPage)="paginate($event)" [value]="photos" [(selection)]="choosedPhotos" [rows]="10" 
+[showCurrentPageReport]="true" [paginator]="true" [rowsPerPageOptions]="[10,25,50]" (onFilter)="filterEvent($event)">
     <ng-template pTemplate="caption">
         <div class="table-header">
-            Zdjęcia w galeri
-        </div>
-        <br>
+            {{getHeader()}}
+        </div><br>
+        <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+            selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Choose Columns"></p-multiSelect>
+        <br><br>
         <p-toolbar>
             <div class="p-toolbar-group-right">
                 <p-button icon="pi pi-check-circle" (click)="acceptPhotoChoosen()"></p-button> &nbsp;           
@@ -14,7 +16,7 @@
             </div>
         </p-toolbar>
     </ng-template>
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header" let-columns>
         <tr>
             <th style="width: 5rem">
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
@@ -22,40 +24,19 @@
             <th style="width: 200px">
                 &nbsp;
             </th>
-            <th pSortableColumn="name" >
+
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="td">
                 <div class="flex justify-content-between align-items-center">
-                    Nazwa
-                    <p-sortIcon field="name"></p-sortIcon>
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                    <p-columnFilter type="text" [field]="col.field" display="menu"></p-columnFilter>
                 </div>
             </th>
-            <th pSortableColumn="author" >
-                <div class="flex justify-content-between align-items-center">
-                    Autor
-                    <p-sortIcon field="author"></p-sortIcon>
-                </div>
-            </th>
-            <th pSortableColumn="upload_day" >
-                <div class="flex justify-content-between align-items-center">
-                    Data wysłania
-                    <p-sortIcon field="upload_day"></p-sortIcon>
-                </div>
-            </th>
-            <th pSortableColumn="accepted"  style="width: 1rem" >
-                <div class="flex justify-content-between align-items-center">
-                    Akceptowane
-                    <p-sortIcon field="accepted"></p-sortIcon>
-                </div>
-            </th>
-            <th pSortableColumn="visible"  style="width: 1rem" >
-                <div class="flex justify-content-between align-items-center">
-                    Widoczne
-                    <p-sortIcon field="visible"></p-sortIcon>
-                </div>
-            </th>
+            
             <th style="width: 3rem"></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-photo>
+    <ng-template pTemplate="body" let-photo let-columns="columns">
         <tr class="p-selectable-row">
             <td>
                 <p-tableCheckbox [value]="photo"></p-tableCheckbox>
@@ -63,23 +44,11 @@
             <td>
                 <p-image (click)="showPhoto(photo.id)" src="assets/non-photo.png" alt="Image" width="150" [preview]="true" imageClass="{{ 'image-' + photo.id}}"></p-image>
             </td>
-            <td>
-                {{photo.name}}
+            <td *ngFor="let col of columns">
+                {{getColumnData(col, photo)}}
             </td>
             <td>
-                {{photo.author}}
-            </td>
-            <td>
-                {{photo.upload_day | date}}
-            </td>
-            <td>
-                {{photo.accepted}}
-            </td>
-            <td>
-                {{photo.visible}}
-            </td>
-            <td>
-                <button pButton pRipple type="button" icon="pi pi-pencil" iconPos="left" class="p-button-rounded"></button> &nbsp;
+                <button pButton pRipple type="button" icon="pi pi-pencil" iconPos="left" class="p-button-rounded" (click)="showDialog(photo)"></button> &nbsp;
                 <button pButton pRipple type="button" class="p-button-rounded p-button-danger" icon="pi pi-trash" (click)="removePhoto(photo)"></button>
             </td>
         </tr>
@@ -90,3 +59,47 @@
         </tr>
     </ng-template>
 </p-table>
+
+<p-dialog [(visible)]="displayDialog" [modal]="true" [style]="{width: '70vw'}"
+[dismissableMask]="true" [draggable]="false" [resizable]="false">
+    <div class="dialog-content">
+        <img src="assets/non-photo.png" alt="Image" id="image">
+        
+        <form [formGroup]="detailForm" *ngIf="displayDialog">
+            <div class="input">
+                <span>Tagi </span> &nbsp;
+                <p-treeSelect [options]="options" formControlName="tags" selectionMode="checkbox" placeholder="Wybierz Tag"></p-treeSelect>
+            </div>
+    
+            <div class="input">
+                <span>Lokalizacja</span>
+                <input type="text" pInputText formControlName="location"> 
+            </div>
+    
+            <div class="input">
+                <span>Autor</span>
+                <input type="text" pInputText formControlName="author"> 
+            </div>
+    
+            <div class="input">
+                <span>Data przesłania</span>
+                <input type="text" pInputText formControlName="upload_day"> 
+            </div>
+    
+            <div class="input">
+                <span>Zaakceptowane </span>
+                <p-checkbox formControlName="accepted" [binary]="true"></p-checkbox>
+            </div>
+    
+            <div class="input">
+                <span>Widoczne </span>
+                <p-checkbox formControlName="visible" [binary]="true"></p-checkbox>
+            </div>
+        </form>
+    
+        <button (click)="test()">Close</button>
+        <button (click)="sendChange()">Change</button>
+    </div>
+
+
+</p-dialog>

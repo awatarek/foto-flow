@@ -32,7 +32,8 @@ export class CatalogComponent implements OnInit {
   public display: boolean = false;
   public photoDetail: Photo;
   public isLoading: boolean = true;
-  public tags: string[] = [];
+  public tags: any[] = [];
+  public posibleTags: any[] = [];
   public lastPhoto: Photo;
   public nextPhoto: Photo;
   public imageUrl: SafeUrl;
@@ -46,7 +47,7 @@ export class CatalogComponent implements OnInit {
     this.catalogId = parseInt(this.router.snapshot.paramMap.get("id"));
     this.catalogInfo = await this.catalogsService.getCatalogDetails(this.catalogId);
     this.photos = await this.catalogsService.getPhotosFromCatalog(this.catalogId);
-    
+    this.posibleTags = await this.catalogsService.getTags();
 
     this.numberOfPages = Math.ceil(this.photos.length / this.numberOfPhotos);
     for(let i = 0; i< this.numberOfPages; i++){
@@ -276,5 +277,12 @@ export class CatalogComponent implements OnInit {
       this.nextPhoto = this.photos[arrId + 1];
     }
     this.isLoading = false;
+  }
+
+  public translateTag(tag: string){
+    let tag2 = parseInt(tag);
+    for(let item of this.posibleTags){
+      if(tag2 == item.data) return item.label;
+    }
   }
 }
