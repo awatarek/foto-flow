@@ -13,6 +13,10 @@ export class CatalogsService {
 
     constructor(private http: HttpClient){}
 
+    public async editCatalog(data): Promise<void>{
+        await this.http.post(this.url+"catalog/edit", data).toPromise();
+    }
+
     public async getCatalogs(): Promise<Catalog[]>{
         return await this.http.get<Catalog[]>(this.url+"catalogs").toPromise();
     }

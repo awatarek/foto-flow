@@ -12,7 +12,7 @@
                 <p-button icon="pi pi-check-circle" (click)="acceptPhotoChoosen()"></p-button> &nbsp;           
                 <p-button icon="pi pi-eye" (click)="visiblePhotoChoosen()"></p-button> &nbsp;
                 <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-danger" (click)="removePhotoChoosen()"></button> &nbsp;
-                <p-button label="Edytuj galerię" icon="pi pi-pencil" iconPos="left"></p-button> &nbsp;
+                <p-button label="Edytuj galerię" icon="pi pi-pencil" iconPos="left" *ngIf="isCatalog" (click)="showCatalogDialog()"></p-button> &nbsp;
             </div>
         </p-toolbar>
     </ng-template>
@@ -97,9 +97,33 @@
             </div>
         </form>
     
-        <button (click)="test()">Close</button>
-        <button (click)="sendChange()">Change</button>
+        <button pButton (click)="displayDialog = false">Zamknij</button> &nbsp;
+        <button pButton (click)="sendChange()">Edytuj</button>
     </div>
+</p-dialog>
 
+<p-dialog [(visible)]="displayCatalogDialog" [modal]="true" [style]="{width: '70vw'}"
+[dismissableMask]="true" [draggable]="false" [resizable]="false">
+    <div class="dialog-content">
 
+        <form [formGroup]="detailCatalogForm" *ngIf="displayCatalogDialog">
+            <div class="input">
+                <span>Nazwa</span>
+                <input type="text" pInputText formControlName="name"> 
+            </div>
+    
+            <div class="input">
+                <span>Zaakceptowane </span>
+                <p-checkbox formControlName="accepted" [binary]="true"></p-checkbox>
+            </div>
+    
+            <div class="input">
+                <span>Widoczne </span>
+                <p-checkbox formControlName="visible" [binary]="true"></p-checkbox>
+            </div>
+        </form>
+
+        <button pButton (click)="displayCatalogDialog = false">Zamknij</button>&nbsp;
+        <button pButton (click)="sendCatalogChange()">Edytuj</button>
+    </div>
 </p-dialog>

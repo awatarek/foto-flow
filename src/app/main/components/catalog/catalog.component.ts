@@ -84,7 +84,6 @@ export class CatalogComponent implements OnInit {
 
       download.subscribe(
         (event)=>{
-            console.log(event);
             if(event.type == 4){
               blob=event.body;
               this.download(blob);
@@ -279,10 +278,14 @@ export class CatalogComponent implements OnInit {
     this.isLoading = false;
   }
 
-  public translateTag(tag: string){
-    let tag2 = parseInt(tag);
+  public translateTag(tag: string, index){
+    let tag2 = parseInt(index);
     for(let item of this.posibleTags){
       if(tag2 == item.data) return item.label;
     }
+  }
+
+  public stringToTag(tag:string): string[]{
+    return tag.split(",");
   }
 }

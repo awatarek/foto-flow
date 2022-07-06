@@ -9,10 +9,10 @@
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
     padding: 20px;
-    width: 450px;
+    max-width: 450px;
 
     button{
-        height: 26px;
+        min-height: 26px;
         font-size: 14px;
         background-color: whitesmoke;
         padding: 4px;
@@ -124,11 +124,12 @@
     }
 
     img{
+        display: block;
         width: 100%;
         min-width: 160px;
         min-height: 250px;
         max-width: 720px;
-        max-height: 500px;
+        max-height: 450px;
         margin: auto;
         text-align: center;
         object-fit:contain;

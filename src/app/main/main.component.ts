@@ -97,7 +97,6 @@ export class MainComponent implements OnInit {
 
   public searchPhotos(){
     let val = this.form.value;
-    console.log(this.form.value);
     let tags = "";
     for(let item of val.tags){
       if(!isNaN(item.data)) tags+=item.data+",";

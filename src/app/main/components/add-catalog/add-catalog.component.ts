@@ -22,6 +22,7 @@ export class AddCatalogComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl(''),
       location: new FormControl(''),
+      author: new FormControl(''),
       tags: new FormControl('')
     });
   }
@@ -46,7 +47,6 @@ export class AddCatalogComponent implements OnInit {
     this.toUpload = 0;
 
     (await upload).subscribe((eve) =>{
-      console.log(eve)
       if(eve.type == 0){
         this.isUploading = true;
       } else if(eve.type == 1){

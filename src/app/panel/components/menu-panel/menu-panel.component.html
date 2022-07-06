@@ -15,7 +15,9 @@
 <p-sidebar [(visible)]="displaySideMenu" position="right">
     <div class="mobile-content">
         <div class="menu-mobile-item menu-main" [routerLink]="['/panel']">Strona główna</div>
+        <div class="menu-mobile-item" [routerLink]="['catalogs', 0]">Zdjęcia</div>
         <div class="menu-mobile-item" [routerLink]="['catalogs']">Galerie</div>
+        <div class="menu-mobile-item" [routerLink]="['catalogs', 'tags']">Tagi</div>
         <div class="menu-mobile-item" [routerLink]="['verification']">Weryfikacja</div>
         <div class="menu-mobile-item" [routerLink]="['']">Wyloguj</div>
     </div>

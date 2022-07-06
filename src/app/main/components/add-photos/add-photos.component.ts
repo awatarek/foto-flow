@@ -26,7 +26,6 @@ export class AddPhotosComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl(''),
       location: new FormControl(''),
       author: new FormControl(''),
       catalogId: new FormControl(this.catalogId)

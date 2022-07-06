@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Catalog } from 'src/app/shared/model/catalog.model';
 import { Photo } from 'src/app/shared/model/photo.model';
 import { PosibleTags } from 'src/app/shared/model/posibleTags.model';
 import { Tag } from 'src/app/shared/model/tag.model';
@@ -23,11 +24,16 @@ export class CatalogPhotoPanelComponent implements OnInit {
   public rows = 10;
   public tags: any;
   public possibleTags;
+
+  public displayCatalogDialog: boolean = false;
+  public detailCatalogForm: FormGroup;
+  public catalogDetails: Catalog;
   
   public displayDialog: boolean = false;
   public detailForm: FormGroup;
   public formTags: PosibleTags;
   public options: any;
+  public isCatalog: boolean = false;
 
 
   public _selectedColumns: any[];
@@ -56,7 +62,6 @@ export class CatalogPhotoPanelComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.catalogId = this.router.snapshot.params.id;
     this.possibleTags =  await this.cs.getTags();
-    console.log(this.catalogId);
 
     if(this.catalogId == "0"){
       this.photos = await this.cs.getAllPhotos();
@@ -64,6 +69,9 @@ export class CatalogPhotoPanelComponent implements OnInit {
       this.photos = await this.cs.getPhotoWithNoTags();
     } else {
       this.photos = await this.cs.getPhotosFromCatalog(parseInt(this.catalogId));
+      let data = await this.cs.getCatalogDetails(parseInt(this.catalogId));
+      this.catalogDetails = data[0];
+      this.isCatalog = true;
     }
 
     this.photosWithSort = this.photos;
@@ -254,15 +262,9 @@ export class CatalogPhotoPanelComponent implements OnInit {
       this._selectedColumns = this.cols.filter(col => val.includes(col));
   }
 
-  public test(){
-    console.log(this.detailForm.value.tags)
-  }
-
   public async sendChange(){
     let photo: Photo = this.detailForm.value;
-
     let tag1: string = "";
-
     let tags = this.detailForm.controls['tags'].value;
 
     for(let tag of tags){
@@ -294,7 +296,7 @@ export class CatalogPhotoPanelComponent implements OnInit {
       if(photo.tags != null){
         let tag = photo[col.field];
         let tags = tag.split(",");
-        console.log(tags)
+
         let tagString = "";
         for(let tag1 of tags){
           for(let tag2 of this.possibleTags){
@@ -310,7 +312,6 @@ export class CatalogPhotoPanelComponent implements OnInit {
         return "";
       }
     } else if(col.field == "visible" || col.field == "accepted"){
-      console.log(col, photo)
       return photo[col.field] ? true : false;
     } else{
       return photo[col.field];
@@ -326,5 +327,30 @@ export class CatalogPhotoPanelComponent implements OnInit {
       return "Zdjęcia w galeri";
     }
   }
+
+  public async showCatalogDialog() {
+    console.log(this.catalogDetails)
+
+    this.detailCatalogForm = new FormGroup({
+      catalogID: new FormControl(this.catalogId),
+      name: new FormControl(this.catalogDetails.name),
+      accepted: new FormControl(this.catalogDetails.accepted ? true : false),
+      visible: new FormControl(this.catalogDetails.visible ? true : false),
+    });
+    this.displayCatalogDialog = true;
+  }
+
+  public async sendCatalogChange(){
+    let form = this.detailCatalogForm.value;
+    let catalog: any = {
+      id: form.catalogID,
+      name: form.name,
+      visible: form.visible ? 1 : 0,
+      accepted: form.accepted ? 1 : 0,
+    }
+    await this.cs.editCatalog(catalog);
+    this.displayCatalogDialog = false;
+  }
+
 }
 
