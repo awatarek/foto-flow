@@ -63,12 +63,12 @@ export class CatalogPhotoPanelComponent implements OnInit {
     this.catalogId = this.router.snapshot.params.id;
     this.possibleTags =  await this.cs.getTags();
 
-    if(this.catalogId == "0"){
+    if(this.catalogId == "all"){
       this.photos = await this.cs.getAllPhotos();
     } else if(this.catalogId == "tags"){
       this.photos = await this.cs.getPhotoWithNoTags();
     } else {
-      this.photos = await this.cs.getPhotosFromCatalog(parseInt(this.catalogId));
+      this.photos = await this.cs.getAllPhotosFromCatalog(parseInt(this.catalogId));
       let data = await this.cs.getCatalogDetails(parseInt(this.catalogId));
       this.catalogDetails = data[0];
       this.isCatalog = true;

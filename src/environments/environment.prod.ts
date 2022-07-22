@@ -1,4 +1,7 @@
+import { msal } from "./msal";
+
 export const environment = {
   production: true,
-  API_URL: "http://lanflair.itemstore.top:4001/api/v1/"
+  API_URL: "http://foto-flow.bartoskrupa.pl:4001/api/v1/",
+  azure: msal
 };

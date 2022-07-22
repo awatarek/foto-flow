@@ -47,10 +47,14 @@
         background-color: #344E41;
         border: 1px solid #344e4134;
     }
-}
 
-.search-menu{
-    height: auto;
+}
+.search-overlay{
+    ::ng-deep .p-treeselect {
+        width: 100%;
+        max-width: 400px;
+        display: inline-flex;
+    }
 }
 
 .content{
@@ -101,6 +105,11 @@
             background-color: rgba(0, 0, 0, 0.103);
         }
     }
+
+    ::ng-deep .p-treeselect {
+        width: 220px;
+        display: inline-flex;
+    }
 }
 
 @media screen and (max-width: 900px) {
@@ -123,6 +132,10 @@ form{
 
     .input{
         margin: 10px 0;
+
+        .label{
+            margin: 3px 0;
+        }
     }
 
     input{
@@ -168,3 +181,4 @@ form{
         margin: 10px 0;
     }
 }
+

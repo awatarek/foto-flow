@@ -1,7 +1,7 @@
 <div class="content">
     <img src="/assets/Krzyz_FSE.png" alt="">
     <div class="menu-item menu-main" [routerLink]="['/panel']" *ngIf="!isMobile">Strona główna</div>
-    <div class="menu-item" [routerLink]="['catalogs', 0]"  *ngIf="!isMobile">Zdjęcia</div>
+    <div class="menu-item" [routerLink]="['catalogs', 'all']"  *ngIf="!isMobile">Zdjęcia</div>
     <div class="menu-item" [routerLink]="['catalogs']"  *ngIf="!isMobile">Galerie</div>
     <div class="menu-item" [routerLink]="['catalogs', 'tags']"  *ngIf="!isMobile">Tagi</div>
     <div class="menu-item" [routerLink]="['verification']"  *ngIf="!isMobile">Weryfikacja</div>
@@ -15,7 +15,7 @@
 <p-sidebar [(visible)]="displaySideMenu" position="right">
     <div class="mobile-content">
         <div class="menu-mobile-item menu-main" [routerLink]="['/panel']">Strona główna</div>
-        <div class="menu-mobile-item" [routerLink]="['catalogs', 0]">Zdjęcia</div>
+        <div class="menu-mobile-item" [routerLink]="['catalogs', 'all']">Zdjęcia</div>
         <div class="menu-mobile-item" [routerLink]="['catalogs']">Galerie</div>
         <div class="menu-mobile-item" [routerLink]="['catalogs', 'tags']">Tagi</div>
         <div class="menu-mobile-item" [routerLink]="['verification']">Weryfikacja</div>

@@ -66,7 +66,7 @@
         <img src="assets/non-photo.png" alt="Image" id="image">
         
         <form [formGroup]="detailForm" *ngIf="displayDialog">
-            <div class="input">
+            <div class="input tags-form">
                 <span>Tagi </span> &nbsp;
                 <p-treeSelect [options]="options" formControlName="tags" selectionMode="checkbox" placeholder="Wybierz Tag"></p-treeSelect>
             </div>

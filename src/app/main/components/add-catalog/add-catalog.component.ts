@@ -55,10 +55,13 @@ export class AddCatalogComponent implements OnInit {
       }else if(eve.type == 4){
         this.isUploading = false;
         this.showSucessInfo = true;
+        setTimeout(()=>{this.showSucessInfo = false}, 4000)
       }
     })
 
     this.form.reset();
+    this.files = [];
+    this.uploadedFiles = [];
   }
 
   public fileChange(event){

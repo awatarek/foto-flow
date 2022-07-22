@@ -2,9 +2,12 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { msal } from "./msal";
+
 export const environment = {
   production: false,
-  API_URL: "http://localhost:4001/api/v1/"
+  API_URL: "http://localhost:4001/api/v1/",
+  azure: msal
 };
 
 /*

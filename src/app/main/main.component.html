@@ -61,24 +61,25 @@
 <p-overlayPanel #op position="top" [baseZIndex]="10000">
     <form [formGroup]="form">
         <div class="input">
-            <span>Nazwa</span>
+            <div class="label" class="label">Nazwa</div>
             <input type="text" pInputText formControlName="name"> 
         </div>
 
         <div class="input">
-            <span>Lokalizacja</span>
+            <div class="label">Lokalizacja</div>
             <input type="text" pInputText formControlName="location"> 
         </div>
 
         <div class="input">
-            <span>Autor</span>
+            <div class="label">Autor</div>
             <input type="text" pInputText formControlName="author"> 
         </div>
 
-        <div class="input">
-            <span>Tagi</span><br>
+        <div class="input search-overlay">
+            <div class="label">Tagi</div>
             <p-treeSelect formControlName="tags" selectionMode="checkbox" [options]="searchItems" placeholder="Wybierz Tag"></p-treeSelect>
         </div>
+        <br>
         <p-button (click)="searchPhotos()" icon="pi pi-search"></p-button>
     </form>
 </p-overlayPanel>

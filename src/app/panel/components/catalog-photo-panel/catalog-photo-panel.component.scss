@@ -38,6 +38,15 @@ table {
         margin: auto;
         text-align: center;
     }
+
+    ::ng-deep .p-treeselect {
+        width: 220px;
+        display: inline-flex;
+
+        .p-tree-selectable{
+            max-height: 300px;
+        }
+    }
 }
 
 form{

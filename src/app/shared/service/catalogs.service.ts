@@ -57,6 +57,10 @@ export class CatalogsService {
         return await this.http.get<Photo[]>(this.url+"catalog/"+catalogID).toPromise()
     }
 
+    public async getAllPhotosFromCatalog(catalogID: number){
+        return await this.http.get<Photo[]>(this.url+"catalog/all/"+catalogID).toPromise()
+    }
+
     public async getCatalogDetails(catalogID: number): Promise<any>{
         return await this.http.get<Catalog>(this.url+"catalog/details/"+catalogID).toPromise();
     }
