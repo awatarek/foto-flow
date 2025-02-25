@@ -1,20 +1,23 @@
-<p class="header" *ngIf="catalogInfo">{{catalogInfo[0].name}}</p>
+<div class="catalog-header">
+    <p class="header" *ngIf="catalogInfo">{{catalogInfo[0].name}}</p>
 
-<div class="buttons">
-    <button (click)="downloadMultipleFile()">Pobierz wszystkie</button>
-    <button (click)="chooseMultipleFile()">Pobierz Wybrane</button>
-    <button (click)="downloadMultipleFile()" *ngIf="downloadMultiple">Pobierz ({{fileToDownload.length}})</button>
-</div>
-
-<mat-progress-bar mode="query" *ngIf="downloadInProgress"></mat-progress-bar><br><br>
-
-<div class="pages" *ngIf="numberOfPages != 1">
-    <div class="page-list">
-        <div class="page" *ngFor="let item of pageArray" [ngClass]="isActive(item)" (click)="setPage(item)">
-            <div>{{item}}</div>
-        </div>
+    <div class="buttons">
+        <button (click)="downloadMultipleFile()">Pobierz wszystkie</button>
+        <button (click)="chooseMultipleFile()">Pobierz Wybrane</button>
+        <button (click)="downloadMultipleFile()" *ngIf="downloadMultiple">Pobierz ({{fileToDownload.length}})</button>
     </div>
+    
+    <mat-progress-bar mode="query" *ngIf="downloadInProgress"></mat-progress-bar>
+    
+    <div class="pages" *ngIf="numberOfPages != 1">
+        <div class="page-list">
+            <div class="page" *ngFor="let item of pageArray" [ngClass]="isActive(item)" (click)="setPage(item)">
+                <div>{{item}}</div>
+            </div>
+        </div>
+    </div>    
 </div>
+
 
 <div class="gallery">
     <div *ngFor="let item of visiblePhoto" class="gallery-item" (click)="openDialog(item); addToMany(item.id)" [ngClass]="classIsActive(item.id)">

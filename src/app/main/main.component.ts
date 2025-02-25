@@ -60,15 +60,19 @@ export class MainComponent implements OnInit {
 
     let tags = await this.catalogService.getTags();
 
-    for(const [key, item] of Object.entries(tags)){
-      if(item.type == 0){
-        this.posibleTask.eve.push({label: item.label, data: item.data});
-      } else if(item.type == 1){
-        this.posibleTask.bra.push({label: item.label, data: item.data});
-      } else {
-        this.posibleTask.inv.push({label: item.label, data: item.data});
+    if(tags != null){
+      for(const [key, item] of Object.entries(tags)){
+        if(item.type == 0){
+          this.posibleTask.eve.push({label: item.label, data: item.data});
+        } else if(item.type == 1){
+          this.posibleTask.bra.push({label: item.label, data: item.data});
+        } else {
+          this.posibleTask.inv.push({label: item.label, data: item.data});
+        }
       }
     }
+
+
 
     this.searchItems = [
       {

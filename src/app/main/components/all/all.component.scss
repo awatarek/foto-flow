@@ -1,10 +1,10 @@
 .content{
     height: 100%;
-    width: 100vw;
+    width: 100%;
 
     .header{
         background-color: #DAD7CD;
-        width: calc(100vw - 15px);
+        width: calc(100% - 15px);
 
         img{
             margin: 10px;
@@ -40,70 +40,51 @@
 
     .gallery{
         display: grid;
-        width: calc(100% - 30px);
-        grid-gap: 10px;
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 10px;
+        grid-gap: 5px;
 
         .gallery-item{
             width: 100%;
-            margin: auto;
+            max-width: 250px;
             transition: .2s;
             text-align: center;
             cursor: pointer;
             position: relative;
+
             
             img{
                 margin: auto;
                 content: 'null';
-                background-color: grey;
                 width: 100%;
-                max-height: 200px;
-                text-align: center;
+                max-width: 250px;
                 object-fit: cover;
+                aspect-ratio: 1/1;
             }
 
             &:hover > .details{
-                display: block;
+                visibility: visible;
                 transition: .3s;
-                background-color: rgba(0, 0, 0, 0.253);
+                background-color: rgba(0, 0, 0, 0.795);
             }
     
             .details{
+                visibility: hidden;
                 transition: .3s;
-                display: none;
                 position: absolute;
                 width: 100% ;
                 height: 100%;
-                padding: 10px;
-                bottom: 0;
+                max-height: 250px;
+                bottom: 4px;
                 color: white;
+                padding: 10px;
+                font-size: 18px;
                 cursor: pointer;
                 background-color: rgba(0, 0, 0, 0);
             }
         }
-    }
-}
-
-@media screen and (min-width: 600px) {
-    .gallery {
-       grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media screen and (min-width: 900px) {
-    .gallery {
-       grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-
-@media screen and (min-width: 1200px) {
-    .gallery {
-       grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-@media screen and (min-width: 1500px) {
-    .gallery {
-       grid-template-columns: repeat(5, 1fr);
     }
 }

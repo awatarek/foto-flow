@@ -36,6 +36,7 @@ import {TreeSelectModule} from 'primeng/treeselect';
   ],
   imports: [
     CommonModule,
+    RouterModule,
     RouterModule.forChild(PanelRouter),
     ReactiveFormsModule,
     FormsModule,

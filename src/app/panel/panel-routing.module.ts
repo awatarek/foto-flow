@@ -7,8 +7,7 @@ import { PhotoVerificationPanelComponent } from './components/photo-verification
 import { PanelComponent } from './panel.component';
 
  export let PanelRouter: Routes = [
-  {path: "", component: PanelComponent, 
-    children: [
+  {path: "", component: PanelComponent, children: [
       {path: "catalogs", children:[
         {path: ":id", component: CatalogPhotoPanelComponent},
         {path: "", component: CatalogPanelComponent}

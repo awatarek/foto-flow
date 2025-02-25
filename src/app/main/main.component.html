@@ -27,7 +27,6 @@
         <a [routerLink]="['/']">Strona główna</a>
         <a [routerLink]="['/add-catalog']" *ngIf="!isCatalog && !isAdd">Dodaj galerie</a>
         <a [routerLink]="['/add-photos', catalogId]" *ngIf="isCatalog && !isAdd">Dodaj zdjęcia</a>
-        <a *ngIf="isAdd"></a>
 
         <p-accordion>
             <p-accordionTab header="Wyszukiwanie">

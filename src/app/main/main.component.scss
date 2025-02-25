@@ -87,10 +87,10 @@
 }
 
 .mobile-menu{
+    max-height: 100vh;
     width: 100%;
     margin-left: auto;
     display: grid;
-    grid-template-rows: 1fr 1fr 8fr;
     text-align: center;
 
     a{

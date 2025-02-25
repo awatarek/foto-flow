@@ -79,7 +79,10 @@ export class CatalogComponent implements OnInit {
 
     this.downloadInProgress = true;
 
-    if(this.fileToDownload.length > 0){
+    if(this.fileToDownload.length == 1){
+      await(this.downloadSingle(this.fileToDownload[0]))
+      this.downloadInProgress = false;
+    } else if(this.fileToDownload.length > 0){
       let download = await this.catalogsService.downloadMultiplePhoto(this.fileToDownload, this.catalogId);
 
       download.subscribe(
@@ -101,6 +104,9 @@ export class CatalogComponent implements OnInit {
         }
       );
     }
+
+    this.fileToDownload = [];
+    this.downloadMultiple = !this.downloadMultiple;
   }
 
   private download(blob: Blob){
@@ -181,46 +187,53 @@ export class CatalogComponent implements OnInit {
     return "";
   }
 
-  /*-------------------------------------------------------*/ 
-
   public async openDialog(photo: Photo){
-    this.isLoading = true;
-    this.photoDetail = photo;
-    this.display = true;
-    if(this.photoDetail.tags){
-      this.tags = photo.tags.split(",");
-    }
-
-    let isFound = false;
-
-    for(let item of this.image){
-      if(item.id == photo.id){
-        let url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(item.blob));
+    if(!this.downloadMultiple){
+      this.isLoading = true;
+      this.photoDetail = photo;
+      this.display = true;
+      if(this.photoDetail.tags){
+        this.tags = photo.tags.split(",");
+      }
+  
+      let isFound = false;
+  
+      for(let item of this.image){
+        if(item.id == photo.id){
+          let url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(item.blob));
+          this.imageUrl = url;
+          isFound = true;
+          break;
+        }
+      }
+  
+      if(!isFound){
+        let file = await this.catalogsService.getPhoto(this.photoDetail.id);
+        let url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(file));
         this.imageUrl = url;
         isFound = true;
-        break;
       }
+  
+      this.setNewPhoto(this.photoDetail)
+  
+      this.isLoading = false;
     }
 
-    if(!isFound){
-      let file = await this.catalogsService.getPhoto(this.photoDetail.id);
-      let url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(file));
-      this.imageUrl = url;
-      isFound = true;
-    }
-
-    this.setNewPhoto(this.photoDetail)
-
-    this.isLoading = false;
   }
 
-  public async dialogDownload(){
-    let file = await this.catalogsService.getPhoto(this.photoDetail.id);
+  public async downloadSingle(file1: Photo){
+    let fileDetail = file1;
+    let file = await this.catalogsService.getPhoto(fileDetail.id);
     let url = URL.createObjectURL(file);
     const link = document.createElement('a');
     link.href = url;
-    link.download = this.photoDetail.name;
+    link.download = fileDetail.name;
     link.click();
+  }
+
+
+  public async dialogDownload(){
+    this.downloadSingle(this.photoDetail)
   }
 
   async onNext(): Promise<void> {
